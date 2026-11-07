@@ -1,0 +1,19 @@
+/* The single global. Every other file attaches to LIME inside an IIFE.
+   VERSION must match ?v= on every asset link in index.html, sw.js VERSION
+   and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
+var LIME = {
+  VERSION: '0.1.0',
+  RELEASES: [
+    {
+      version: '0.1.0',
+      date: '2026-11-07',
+      notes: [
+        'First version: profile setup, a plan built from your goal, days and equipment.',
+        'Workout player with sets, rest timer, 3-2-1 countdown and screen kept on.',
+        'Exercise library with moving illustrations, steps and common mistakes.',
+        'Progress: weekly volume, streak, personal records, body weight and a 12-week calendar.',
+        'Backup and restore to a file. Everything stays on your phone.'
+      ]
+    }
+  ]
+};
