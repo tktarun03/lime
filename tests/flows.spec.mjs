@@ -203,6 +203,7 @@ test('self-check passes on this browser', async ({ page }) => {
 
 test('3D body demo replaces the drawing when WebGL is available', async ({ page }) => {
   const errs = errorsOf(page);
+  await page.addInitScript(() => { try { localStorage.setItem('lime.force3d', '1'); } catch (e) { /* ignore */ } });
   await onboard(page);
   await page.goto('/#/library/goblet-squat');
   await expect(page.locator('.sheet .b3d')).toBeVisible();
@@ -212,7 +213,8 @@ test('3D body demo replaces the drawing when WebGL is available', async ({ page 
     await page.keyboard.press('Escape');
     await page.click('#tabbar [data-tab="progress"]');
     await page.waitForTimeout(300);
-    // canvases that left the page are cleaned up (only the home hero could remain)
+    // figures that left the page are cleaned up (only the home hero could remain)
+    await page.waitForTimeout(300);
     expect(await page.evaluate(() => LIME.body3d.count)).toBeLessThanOrEqual(1);
   }
   expect(errs.filter((e) => !/GL Driver|GPU stall/.test(e))).toEqual([]);

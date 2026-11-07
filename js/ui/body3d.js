@@ -113,6 +113,59 @@
     return shared;
   }
 
+  // ---------- Shared engine ----------
+  // One WebGL renderer for every figure on screen: each figure renders into a
+  // corner of it and copies the pixels to its own 2D canvas. This avoids
+  // creating a WebGL context (and re-baking the studio lighting) per figure,
+  // which was slow on phones and in the player, where the figure is redrawn
+  // after every set.
+  let eng = null;
+  function engine(THREE, accent) {
+    const key = accent.getHexString();
+    if (eng && eng.key === key) return eng;
+    if (!eng) {
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power', preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 0.95;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.setScissorTest(true);
+      renderer.setClearColor(0x000000, 0);
+      eng = { renderer, w: 0, h: 0 };
+    }
+    if (eng.envTex) eng.envTex.dispose();
+    // Studio environment for soft reflections (softboxes in a dark room)
+    const pmrem = new THREE.PMREMGenerator(eng.renderer);
+    const env = new THREE.Scene();
+    env.add(new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshBasicMaterial({ color: 0x151715, side: THREE.BackSide })));
+    const box = (w, h, x, y, z, c, ry, rx) => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide }));
+      m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, 0); env.add(m);
+    };
+    box(4, 2, 0, 4.9, 0, new THREE.Color(2.4, 2.4, 2.3), 0, Math.PI / 2);      // top softbox
+    box(3, 4, 4.9, 1, 1.5, new THREE.Color(1.6, 1.6, 1.55), -Math.PI / 2);        // key side
+    box(2, 5, -4.9, 1, -1, accent.clone().multiplyScalar(1.4), Math.PI / 2);      // accent strip
+    eng.envTex = pmrem.fromScene(env, 0.04).texture;
+    env.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+    pmrem.dispose();
+    eng.key = key;
+    return eng;
+  }
+
+  /** Render a scene at w×h device pixels and copy it onto a 2D canvas. */
+  function blit(R, scene, camera, ctx, w, h) {
+    const r = R.renderer;
+    if (w > R.w || h > R.h) { R.w = Math.max(R.w, w); R.h = Math.max(R.h, h); r.setSize(R.w, R.h, false); }
+    r.setViewport(0, 0, w, h);
+    r.setScissor(0, 0, w, h);
+    r.clear();
+    r.render(scene, camera);
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(r.domElement, 0, R.h - h, w, h, 0, 0, w, h);
+  }
+
   // ---------- One figure ----------
   function build(THREE, host) {
     const fig = host.getAttribute('data-fig') || 'squat';
@@ -131,32 +184,11 @@
     const canvas = document.createElement('canvas');
     canvas.className = 'b3d-canvas';
     canvas.setAttribute('aria-hidden', 'true');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.95;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-    const scene = new THREE.Scene();
+    const ctx2d = canvas.getContext('2d');
     const accent = new THREE.Color(cssColor('--accent', '#D9F20F'));
-
-    // Studio environment for soft reflections (softboxes in a dark room)
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    const env = new THREE.Scene();
-    const room = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshBasicMaterial({ color: 0x151715, side: THREE.BackSide }));
-    env.add(room);
-    const box = (w, h, x, y, z, c, ry, rx) => {
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide }));
-      m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, 0); env.add(m);
-    };
-    box(4, 2, 0, 4.9, 0, new THREE.Color(2.4, 2.4, 2.3), 0, Math.PI / 2);      // top softbox
-    box(3, 4, 4.9, 1, 1.5, new THREE.Color(1.6, 1.6, 1.55), -Math.PI / 2);        // key side
-    box(2, 5, -4.9, 1, -1, accent.clone().multiplyScalar(1.4), Math.PI / 2);      // accent strip
-    const envTex = pmrem.fromScene(env, 0.04).texture;
-    scene.environment = envTex;
-    env.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+    const R = engine(THREE, accent);   // one WebGL renderer + studio lighting for the whole app
+    const scene = new THREE.Scene();
+    scene.environment = R.envTex;
 
     const key = new THREE.DirectionalLight(0xfff8ee, 1.25);
     key.position.set(2.2, 4.5, 3);
@@ -402,10 +434,13 @@
       camera.position.set(center.x + Math.sin(angle) * dist, center.y + dist * 0.26, center.z + Math.cos(angle) * dist);
       camera.lookAt(center.x, center.y - size.y * 0.05, center.z);
     }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let pw = 0, ph2 = 0;
     function resize() {
       const w = host.clientWidth || 300, h = host.clientHeight || 220;
       aspect = w / h;
-      renderer.setSize(w, h, false);
+      pw = Math.max(1, Math.round(w * dpr)); ph2 = Math.max(1, Math.round(h * dpr));
+      canvas.width = pw; canvas.height = ph2;
       camera.aspect = aspect;
       camera.updateProjectionMatrix();
     }
@@ -418,7 +453,7 @@
       const ph = still ? 1 : (1 - Math.cos((2 * Math.PI * t) / dur)) / 2;
       apply(pose(ph));
       frame(still ? base : base + Math.sin(t * 0.32) * 0.36);
-      renderer.render(scene, camera);
+      blit(R, scene, camera, ctx2d, pw, ph2);
     }
 
     resize();
@@ -431,9 +466,7 @@
         if (ro) ro.disconnect();
         scene.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
         mats.forEach((m) => m.dispose());
-        envTex.dispose(); pmrem.dispose();
-        renderer.dispose();
-        try { renderer.forceContextLoss(); } catch (e) { /* ignore */ }
+        [key, rim].forEach((l) => { if (l.shadow && l.shadow.map) l.shadow.map.dispose(); });
         live.delete(inst);
       }
     };
@@ -466,6 +499,9 @@
   function hydrate(root) {
     const slots = Array.from((root || document).querySelectorAll('.b3d:not([data-b3d-on])'));
     if (!slots.length || !webgl() || (LIME.store && LIME.store.state.settings.body3d === false)) return;
+    // Automated test browsers render WebGL in software (very slow); they keep
+    // the flat drawings unless a test opts in with localStorage 'lime.force3d'.
+    if (navigator.webdriver) { let f = null; try { f = localStorage.getItem('lime.force3d'); } catch (e) { /* ignore */ } if (f !== '1') return; }
     if (window.THREE) { slots.forEach((h) => mount(window.THREE, h)); return; }
     load().then((THREE) => slots.forEach((h) => { if (h.isConnected) mount(THREE, h); })).catch(() => { /* keep SVG */ });
   }
