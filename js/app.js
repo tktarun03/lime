@@ -45,6 +45,7 @@
       LIME.toast('Something went wrong', { kind: 'bad', body: String(e.message || e), action: { label: 'Back up', fn: () => LIME.settings.backup() } });
     }
     LIME.icons.hydrate(document);
+    LIME.body3d.hydrate(view);
     if (r.tabs) window.scrollTo(0, 0);
   }
 
@@ -114,6 +115,7 @@
     // exercises reference valid figures
     const badFig = LIME.EXERCISES.filter((e) => !LIME.FIGURES.includes(e.fig)).map((e) => e.id);
     out.push({ name: 'Exercise library', ok: !badFig.length, detail: badFig.length ? 'Missing art: ' + badFig.join(', ') : `${LIME.EXERCISES.length} moves` });
+    out.push({ name: '3D bodies', ok: LIME.body3d.supported, warn: !LIME.body3d.supported, detail: LIME.body3d.supported ? 'WebGL available' : 'No WebGL — showing flat drawings' });
     out.push({ name: 'Keep screen on', ok: LIME.wake.supported, warn: !LIME.wake.supported, detail: LIME.wake.supported ? 'Supported' : 'Not supported in this browser' });
     out.push({ name: 'Offline', ok: 'serviceWorker' in navigator && !!navigator.serviceWorker.controller, warn: true, detail: navigator.serviceWorker && navigator.serviceWorker.controller ? 'Ready' : 'Becomes ready after the next open' });
     return out;

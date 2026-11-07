@@ -25,6 +25,7 @@
         voice: false,
         countdown: true,
         keepAwake: true,
+        body3d: true,
         accent: 'lime',
         text: 'normal',
         restDefault: 60

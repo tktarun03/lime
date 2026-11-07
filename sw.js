@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 
@@ -9,10 +9,9 @@ const ASSETS = [
   'index.html',
   'manifest.webmanifest' + V,
   'css/app.css' + V,
-  'fonts/anton.woff2',
-  'fonts/inter-400.woff2',
-  'fonts/inter-600.woff2',
-  'fonts/inter-700.woff2',
+  'fonts/oswald-var.woff2',
+  'fonts/inter-var.woff2',
+  'vendor/three.min.js',
   'icons/icon.svg' + V,
   'icons/apple-touch-icon.png' + V,
   'icons/icon-192.png',
@@ -29,6 +28,7 @@ const ASSETS = [
   'js/ui/toast.js' + V,
   'js/ui/sheet.js' + V,
   'js/ui/charts.js' + V,
+  'js/ui/body3d.js' + V,
   'js/features/stats.js' + V,
   'js/features/onboarding.js' + V,
   'js/features/home.js' + V,

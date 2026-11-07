@@ -13,7 +13,7 @@ streak, weekly volume, a 12-week calendar, body weight and records.
 **All data stays on the device** (IndexedDB, localStorage fallback). No
 account, no server, no analytics. Backup/restore is a JSON file.
 
-Look: dark only, neon-lime accent, Anton (display, slanted) + Inter (body),
+Look: dark only, neon-lime accent, thin type — Oswald 200–300 (display, slanted) + Inter 300 (body),
 speckle texture on "poster moments" only (intro, player, rest, done screen).
 Everything else stays flat and calm.
 
@@ -24,7 +24,8 @@ index.html              shell: splash, #view, tab bar, script tags in load order
 manifest.webmanifest    PWA manifest
 sw.js                   service worker (page network-first, versioned assets cache-first)
 css/app.css             all styles; tokens at the top
-fonts/                  self-hosted Anton + Inter (OFL) — no Google Fonts requests
+fonts/                  self-hosted variable Oswald + Inter (OFL) — no Google Fonts requests
+vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
 icons/                  app icons (svg + png); favicon.ico at root
 media/                  optional exercise video clips (see media/README.md)
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio

@@ -122,7 +122,7 @@
         <span class="pl-clock" aria-label="Elapsed time">${U.fmtClock(LIME.timer.elapsed(a.startedAt))}</span>
       </div>
       <div class="pl-main">
-        <div class="stage">${LIME.media(ex)}
+        <div class="stage">${LIME.media(ex, { three: true })}
           <button type="button" class="icon-btn" data-info aria-label="How to do ${U.esc(ex.name)}" style="position:absolute;right:10px;top:10px">${LIME.icon('info')}</button></div>
         <div class="eyebrow" style="margin-top:14px">${U.esc(label)}</div>
         <h1 class="disp slant pl-name">${U.esc(ex.name)}</h1>
@@ -154,6 +154,7 @@
       </div>
     </div>`;
 
+    LIME.body3d.hydrate(view);
     U.$('[data-quit]', view).onclick = quit;
     U.$('[data-info]', view).onclick = () => LIME.library.detail(ex.id);
     U.$('[data-more]', view).onclick = moreMenu;

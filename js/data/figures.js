@@ -134,6 +134,10 @@
       return `<circle class="fig-eqf"${op} r="13" cx="${ha[0]}" cy="${ha[1]}">${anim('cx', ha[0], hb[0], dur)}${anim('cy', ha[1], hb[1], dur)}</circle>` +
         `<circle r="4" fill="var(--bg)" cx="${ha[0]}" cy="${ha[1]}">${anim('cx', ha[0], hb[0], dur)}${anim('cy', ha[1], hb[1], dur)}</circle>`;
     }
+    if (eq === 'goblet') {
+      if (far) return '';
+      return `<rect class="fig-eqf" width="9" height="16" rx="3" x="${ha[0] - 8}" y="${ha[1] - 8}">${anim('x', ha[0] - 8, hb[0] - 8, dur)}${anim('y', ha[1] - 8, hb[1] - 8, dur)}</rect>`;
+    }
     if (eq === 'dumbbell') {
       return `<circle class="fig-eqf"${op} r="6.5" cx="${ha[0]}" cy="${ha[1]}">${anim('cx', ha[0], hb[0], dur)}${anim('cy', ha[1], hb[1], dur)}</circle>`;
     }
@@ -187,16 +191,31 @@
     </svg>`;
   }
 
-  /** Video if the exercise has one, otherwise the moving figure. */
+  /**
+   * Video if the exercise has one, otherwise the moving figure.
+   * opts.three: wrap in a slot that LIME.body3d.hydrate() upgrades to the 3D
+   * body (worked muscles lit). The SVG stays as the fallback and first frame.
+   */
   function media(ex, opts) {
     opts = opts || {};
     if (ex.video) {
       return `<video src="${LIME.U.esc(ex.video)}" autoplay loop muted playsinline preload="metadata" aria-label="${LIME.U.esc(ex.name)} demo"></video>`;
     }
-    return figure(ex.fig, { eq: ex.figEq || ex.equipment, label: ex.name + ' demo', still: opts.still });
+    const eq = ex.figEq || ex.equipment;
+    const svg = figure(ex.fig, { eq, label: ex.name + ' demo', still: opts.still });
+    if (!opts.three) return svg;
+    return slot(ex.fig, eq, ex.muscles, svg, opts.ring);
+  }
+
+  /** 3D slot markup for a pattern (used by media() and the intro slides). */
+  function slot(fig, eq, muscles, svg, ring) {
+    const E = LIME.U.esc;
+    return `<div class="b3d"${ring === false ? ' data-ring="0"' : ''} data-fig="${E(fig)}" data-eq="${E(eq || 'none')}" data-muscles="${E((muscles || []).join('|'))}">${svg || figure(fig, { eq })}</div>`;
   }
 
   LIME.figure = figure;
   LIME.media = media;
+  LIME.figureSlot = slot;
   LIME.FIGURES = Object.keys(P);
+  LIME.POSES = { patterns: P, stand: STAND, front: ['jack', 'pullup'] };
 })();

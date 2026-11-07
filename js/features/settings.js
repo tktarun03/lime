@@ -56,6 +56,7 @@
       <div class="set-group">
         <div class="set-row"><span class="ico">${LIME.icon('sparkle')}</span><span class="grow">Accent colour</span>
           <span class="swatches">${ACCENTS.map((a) => `<button type="button" class="swatch${s.settings.accent === a.id ? ' on' : ''}" style="background:${a.color}" data-accent="${a.id}" aria-label="${a.label}"></button>`).join('')}</span></div>
+        ${row({ icon: 'body', label: '3D body demos', sub: LIME.body3d.supported ? 'Turn off to save battery' : 'Not supported on this device', toggle: 'body3d' })}
         <div class="set-row"><span class="ico">${LIME.icon('search')}</span><span class="grow">Text size</span>
           <span class="seg" style="width:170px">${['normal', 'large', 'xlarge'].map((t, i) => `<button type="button" data-text="${t}" class="${s.settings.text === t ? 'on' : ''}" aria-label="${t} text">${['A', 'A+', 'A++'][i]}</button>`).join('')}</span></div>
       </div>

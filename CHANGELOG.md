@@ -4,6 +4,13 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.2.0 — 2026-11-07
+
+- Exercise demos are now 3D bodies, with the worked muscles lit up.
+- Thinner, lighter type throughout.
+- Goblet squat shows one weight held at the chest.
+- Turn 3D demos off in Settings to save battery.
+
 ## 0.1.0 — 2026-11-07
 
 - First version: profile set-up, and a plan built from your goal, days and equipment.

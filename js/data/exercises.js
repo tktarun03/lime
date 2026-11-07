@@ -24,7 +24,7 @@
       cue: 'Land soft and quiet, straight into the next squat.',
       steps: ['Squat down to parallel.', 'Explode up and leave the floor.', 'Land softly on the balls of your feet and sink into the next rep.'],
       mistakes: ['Landing stiff-legged', 'Knees caving on landing'], easier: 'squat' },
-    { id: 'goblet-squat', name: 'Goblet Squat', group: 'legs', muscles: ['Quads', 'Glutes', 'Core'], equipment: 'dumbbell', needs: ['dumbbell'], level: 2, type: 'reps', reps: 10, weighted: true, fig: 'squat', figEq: 'dumbbell',
+    { id: 'goblet-squat', name: 'Goblet Squat', group: 'legs', muscles: ['Quads', 'Glutes', 'Core'], equipment: 'dumbbell', needs: ['dumbbell'], level: 2, type: 'reps', reps: 10, weighted: true, fig: 'squat', figEq: 'goblet',
       cue: 'Hold the weight at your chest, elbows inside the knees at the bottom.',
       steps: ['Hold one dumbbell vertically against your chest.', 'Squat down between your knees, chest up.', 'Pause briefly, then stand up.'],
       mistakes: ['Letting the weight pull you forward', 'Half-depth reps'], easier: 'squat', harder: 'back-squat' },

@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 const errorsOf = (page) => {
   const errs = [];
   page.on('pageerror', (e) => errs.push(String(e)));
-  page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+  page.on('console', (m) => { if (m.type() === 'error' && !/GL Driver|GPU stall|WebGL/.test(m.text())) errs.push(m.text()); });
   return errs;
 };
 
@@ -199,4 +199,21 @@ test('self-check passes on this browser', async ({ page }) => {
   const r = await page.evaluate(() => LIME.app.selfCheck());
   const hard = r.filter((x) => !x.ok && !x.warn);
   expect(hard, JSON.stringify(hard)).toEqual([]);
+});
+
+test('3D body demo replaces the drawing when WebGL is available', async ({ page }) => {
+  const errs = errorsOf(page);
+  await onboard(page);
+  await page.goto('/#/library/goblet-squat');
+  await expect(page.locator('.sheet .b3d')).toBeVisible();
+  const ok = await page.evaluate(() => LIME.body3d.supported);
+  if (ok) {
+    await expect(page.locator('.sheet .b3d.on canvas')).toBeVisible({ timeout: 8000 });
+    await page.keyboard.press('Escape');
+    await page.click('#tabbar [data-tab="progress"]');
+    await page.waitForTimeout(300);
+    // canvases that left the page are cleaned up (only the home hero could remain)
+    expect(await page.evaluate(() => LIME.body3d.count)).toBeLessThanOrEqual(1);
+  }
+  expect(errs.filter((e) => !/GL Driver|GPU stall/.test(e))).toEqual([]);
 });

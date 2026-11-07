@@ -41,6 +41,7 @@
     LIME.icons.hydrate(el);
     open = api;
     if (o.onOpen) o.onOpen(el, api);
+    LIME.body3d.hydrate(el);
     setTimeout(() => { const f = el.querySelector('[autofocus]'); if (f) f.focus(); }, 50);
     return api;
   }

@@ -23,7 +23,7 @@
     const ex = LIME.ex(first.exId);
     const n = day.items.filter((x) => !x.warmup && !x.cooldown).length;
     return `<section class="hero tex" aria-label="Today's workout">
-      <div class="hero-fig">${LIME.media(ex)}</div>
+      <div class="hero-fig">${LIME.media(ex, { three: true, ring: false })}</div>
       <div class="eyebrow">Next up · Day ${idx + 1}</div>
       <h2 class="disp slant" style="margin-top:6px">${U.esc(day.title.split(' ')[0])}<br><span class="hl">${U.esc(day.title.split(' ').slice(1).join(' ') || 'Workout')}</span></h2>
       <div class="meta"><span><b>${n}</b> moves</span><span>~<b>${U.esc(U.fmtDur(LIME.planner.estimate(day)))}</b></span><span>${U.esc(day.focus)}</span></div>
