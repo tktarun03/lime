@@ -2,8 +2,18 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.2.0',
+  VERSION: '0.3.0',
   RELEASES: [
+    {
+      version: '0.3.0',
+      date: '2026-11-07',
+      notes: [
+        'More lifelike 3D bodies: shaped muscles, real lighting and reflections.',
+        'Frosted-glass look with a floating tab bar.',
+        'Smaller text overall, plus Auto (your phone\'s size), S, M, L and XL in Settings.',
+        'Goblet squat now holds the weight at the chest.'
+      ]
+    },
     {
       version: '0.2.0',
       date: '2026-11-07',

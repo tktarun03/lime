@@ -27,7 +27,7 @@
         keepAwake: true,
         body3d: true,
         accent: 'lime',
-        text: 'normal',
+        text: 'm',            // system | s | m | l | xl
         restDefault: 60
       },
       ui: {
@@ -48,6 +48,9 @@
     const out = Object.assign({}, d, s);
     out.settings = Object.assign({}, d.settings, s.settings || {});
     out.ui = Object.assign({}, d.ui, s.ui || {});
+    // v0.3: text sizes renamed (normal/large/xlarge → m/l/xl), new system option
+    out.settings.text = ({ normal: 'm', large: 'l', xlarge: 'xl' })[out.settings.text] || out.settings.text;
+    if (!['system', 's', 'm', 'l', 'xl'].includes(out.settings.text)) out.settings.text = 'm';
     if (!Array.isArray(out.sessions)) out.sessions = [];
     if (!Array.isArray(out.bodyLog)) out.bodyLog = [];
     if (!out.prs || typeof out.prs !== 'object') out.prs = {};

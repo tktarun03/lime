@@ -53,7 +53,7 @@
     const s = st().settings;
     const root = document.documentElement;
     if (s.accent && s.accent !== 'lime') root.setAttribute('data-accent', s.accent); else root.removeAttribute('data-accent');
-    if (s.text && s.text !== 'normal') root.setAttribute('data-text', s.text); else root.removeAttribute('data-text');
+    root.setAttribute('data-text', s.text || 'm');
   }
 
   /** Resize a picked photo to a small square JPEG data URL (keeps storage tiny). */

@@ -217,3 +217,24 @@ test('3D body demo replaces the drawing when WebGL is available', async ({ page 
   }
   expect(errs.filter((e) => !/GL Driver|GPU stall/.test(e))).toEqual([]);
 });
+
+test('text size setting scales the whole UI, Auto follows the phone', async ({ page }) => {
+  await onboard(page);
+  const rootPx = () => page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+  expect(await rootPx()).toBe(15);
+  await page.goto('/#/settings');
+  await page.click('[data-text="xl"]');
+  expect(await rootPx()).toBe(19);
+  await page.click('[data-text="s"]');
+  expect(await rootPx()).toBe(14);
+  await page.click('[data-text="system"]');
+  expect(await rootPx()).toBe(16); // browser default in the test browser
+  expect(await page.evaluate(() => LIME.store.state.settings.text)).toBe('system');
+  await noHorizontalScroll(page);
+});
+
+test('old text size values migrate', async ({ page }) => {
+  await page.goto('/');
+  const out = await page.evaluate(() => [LIME.store.migrate({ settings: { text: 'large' } }).settings.text, LIME.store.migrate({ settings: { text: 'normal' } }).settings.text, LIME.store.migrate({}).settings.text]);
+  expect(out).toEqual(['l', 'm', 'm']);
+});

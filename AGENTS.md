@@ -14,8 +14,10 @@ streak, weekly volume, a 12-week calendar, body weight and records.
 account, no server, no analytics. Backup/restore is a JSON file.
 
 Look: dark only, neon-lime accent, thin type — Oswald 200–300 (display, slanted) + Inter 300 (body),
-speckle texture on "poster moments" only (intro, player, rest, done screen).
-Everything else stays flat and calm.
+frosted glass surfaces (`.glass` and friends) over an ambient glow on `body::before`, speckle
+texture on "poster moments" only (intro, player, rest, done screen).
+All sizes are `rem`, so Settings → Text size (Auto = phone size, S/M/L/XL) scales everything.
+Keep inputs at `max(16px, …)` so iPhone doesn't zoom.
 
 ## Repo map
 
@@ -29,8 +31,8 @@ vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
 icons/                  app icons (svg + png); favicon.ico at root
 media/                  optional exercise video clips (see media/README.md)
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio
-js/data/                exercises, figures (SVG stick-figure animations), planner
-js/ui/                  icons, toast, sheet, charts
+js/data/                exercises, figures (key poses + SVG fallback drawings), planner
+js/ui/                  icons, toast, sheet, charts, body3d (anatomical 3D figures)
 js/features/            stats, onboarding, home, library, player, progress, settings
 js/app.js               boot, router, look, What's new, backup reminder, self-check
 tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)

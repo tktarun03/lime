@@ -113,8 +113,8 @@
           ${optList(LIME.EQUIPMENT, d.equipment, true)}`;
       case 'days':
         return `<h1 class="disp slant">Days per <span class="hl">week</span></h1><p class="lead">This becomes your weekly goal. 3 is a great start.</p>
-          <div class="grid-3">${[2, 3, 4, 5, 6].map((n) => `<button type="button" class="opt${d.days === n ? ' on' : ''}" data-opt="${n}" style="justify-content:center;flex-direction:column;gap:0;min-height:88px">
-            <span class="disp" style="font-size:40px">${n}</span><small>days</small></button>`).join('')}</div>
+          <div class="grid-3">${[2, 3, 4, 5, 6].map((n) => `<button type="button" class="opt${d.days === n ? ' on' : ''}" data-opt="${n}" style="justify-content:center;flex-direction:column;gap:0;min-height:76px">
+            <span class="disp" style="font-size:2.2rem;font-weight:200">${n}</span><small>days</small></button>`).join('')}</div>
           <p class="muted small" style="margin-top:14px">${{ 2: 'Two full-body sessions.', 3: 'Three full-body sessions (A, B, C).', 4: 'Upper / lower split.', 5: 'Push, pull, legs, upper, conditioning.', 6: 'Push, pull, legs — twice.' }[d.days]}</p>`;
       case 'minutes':
         return `<h1 class="disp slant">How <span class="hl">long?</span></h1><p class="lead">Per session, including rests.</p>

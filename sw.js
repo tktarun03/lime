@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 

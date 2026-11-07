@@ -6,6 +6,14 @@
   const U = LIME.U;
   const st = () => LIME.store.state;
 
+  const TEXT_SIZES = [
+    { id: 'system', label: 'Auto', name: 'Same as phone' },
+    { id: 's', label: 'S', name: 'Small' },
+    { id: 'm', label: 'M', name: 'Medium' },
+    { id: 'l', label: 'L', name: 'Large' },
+    { id: 'xl', label: 'XL', name: 'Extra large' }
+  ];
+
   const ACCENTS = [
     { id: 'lime', color: '#D9F20F', label: 'Lime' },
     { id: 'orange', color: '#FF9F1C', label: 'Orange' },
@@ -35,8 +43,8 @@
       <header class="page-hd"><h1 class="disp slant">Sett<span class="hl">ings</span></h1></header>
 
       <a class="card card-link row" href="#/settings/profile" style="gap:14px">
-        <span class="avatar" style="width:56px;height:56px;font-size:22px">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc((p.name || '?').charAt(0).toUpperCase())}</span>
-        <span class="grow"><strong style="font-size:1.1em">${U.esc(p.name)}</strong><br>
+        <span class="avatar" style="width:48px;height:48px;font-size:1.2rem">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc((p.name || '?').charAt(0).toUpperCase())}</span>
+        <span class="grow"><strong style="font-size:1.05rem">${U.esc(p.name)}</strong><br>
           <span class="small muted">${U.esc(goal ? goal.label : '')} · ${p.days}×/week · ${p.minutes} min</span></span>
         <span class="ico muted">${LIME.icon('chev')}</span></a>
 
@@ -57,8 +65,10 @@
         <div class="set-row"><span class="ico">${LIME.icon('sparkle')}</span><span class="grow">Accent colour</span>
           <span class="swatches">${ACCENTS.map((a) => `<button type="button" class="swatch${s.settings.accent === a.id ? ' on' : ''}" style="background:${a.color}" data-accent="${a.id}" aria-label="${a.label}"></button>`).join('')}</span></div>
         ${row({ icon: 'body', label: '3D body demos', sub: LIME.body3d.supported ? 'Turn off to save battery' : 'Not supported on this device', toggle: 'body3d' })}
-        <div class="set-row"><span class="ico">${LIME.icon('search')}</span><span class="grow">Text size</span>
-          <span class="seg" style="width:170px">${['normal', 'large', 'xlarge'].map((t, i) => `<button type="button" data-text="${t}" class="${s.settings.text === t ? 'on' : ''}" aria-label="${t} text">${['A', 'A+', 'A++'][i]}</button>`).join('')}</span></div>
+        <div class="set-row col">
+          <div class="row"><span class="ico">${LIME.icon('search')}</span><span class="grow">Text size<small>${s.settings.text === 'system' ? 'Following your phone\'s text size' : 'Auto follows your phone\'s text size'}</small></span></div>
+          <div class="seg" role="radiogroup" aria-label="Text size">${TEXT_SIZES.map((t) => `<button type="button" data-text="${t.id}" class="${s.settings.text === t.id ? 'on' : ''}" role="radio" aria-checked="${s.settings.text === t.id}" aria-label="${t.name}">${t.label}</button>`).join('')}</div>
+        </div>
       </div>
 
       <div class="section-title"><h2>Your data</h2></div>
@@ -115,7 +125,7 @@
     const sh = LIME.sheet.open({
       title: 'Profile',
       body: `<div class="stack">
-        <div class="row"><span class="avatar" id="pf-av" style="width:64px;height:64px;font-size:24px">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc(p.name.charAt(0).toUpperCase())}</span>
+        <div class="row"><span class="avatar" id="pf-av" style="width:56px;height:56px;font-size:1.3rem">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc(p.name.charAt(0).toUpperCase())}</span>
           <label class="btn btn-ghost" for="pf-photo">Change photo</label><input type="file" id="pf-photo" accept="image/*" hidden>
           ${p.photo ? '<button type="button" class="link-btn" data-rm-photo>Remove</button>' : ''}</div>
         <label class="field"><span>Name</span><input class="input" id="pf-name" maxlength="24" value="${U.esc(p.name)}"></label>

@@ -78,7 +78,7 @@
     view.innerHTML = `
       <header class="home-hd">
         <div><div class="eyebrow">${U.esc(U.greet())}</div>
-          <h1 class="disp slant" style="font-size:34px;margin-top:4px">${U.esc(p.name)}</h1></div>
+          <h1 class="disp slant">${U.esc(p.name)}</h1></div>
         <a href="#/settings/profile" class="avatar" aria-label="Profile">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc(initial)}</a>
       </header>
 
@@ -91,7 +91,7 @@
       <div class="card" style="margin-top:12px">
         <div class="ring-wrap">${LIME.charts.ring(wk / goal, `${wk}/${goal}`, 76)}
           <div class="grow"><div class="eyebrow">This week</div>
-            <strong style="font-size:1.15em">${wk >= goal ? 'Weekly goal hit!' : `${U.plural(goal - wk, 'workout')} to go`}</strong>
+            <strong style="font-size:1.02rem">${wk >= goal ? 'Weekly goal hit!' : `${U.plural(goal - wk, 'workout')} to go`}</strong>
             <div class="week-dots">${LIME.stats.daysThisWeek().map((d) => `<span class="${d.done ? 'done' : ''}${d.today ? ' today' : ''}"><i></i>${d.label}</span>`).join('')}</div></div>
         </div>
       </div>

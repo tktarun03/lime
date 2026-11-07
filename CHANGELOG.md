@@ -4,6 +4,13 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.3.0 — 2026-11-07
+
+- More lifelike 3D bodies: shaped muscles, real lighting and reflections.
+- Frosted-glass look with a floating tab bar.
+- Smaller text overall, plus Auto (your phone's size), S, M, L and XL in Settings.
+- Goblet squat now holds the weight at the chest.
+
 ## 0.2.0 — 2026-11-07
 
 - Exercise demos are now 3D bodies, with the worked muscles lit up.
