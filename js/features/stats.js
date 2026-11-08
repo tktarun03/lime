@@ -130,6 +130,50 @@
     return 0;
   }
 
+  /** The sets done for an exercise in the most recent workout that had it. */
+  function lastSets(exId) {
+    const s = st().sessions;
+    for (let i = s.length - 1; i >= 0; i--) {
+      const sets = (s[i].sets || []).filter((x) => x.exId === exId && x.done);
+      if (sets.length) return { sets, date: s[i].end };
+    }
+    return null;
+  }
+
+  // Smallest sensible jump per equipment: [kg, lb]
+  const STEP = { barbell: [2.5, 5], dumbbell: [2, 5], kettlebell: [4, 10] };
+
+  /**
+   * Next weight for a weighted exercise, from the last workout's heaviest sets.
+   * up   — every top set reached the target reps: add one step.
+   * down — most top sets fell well short (under 70% of target): drop one step.
+   * hold — otherwise: same weight, aim for every rep.
+   * Returns null for bodyweight/timed moves or with no history.
+   */
+  function suggest(exId, targetReps, units) {
+    const ex = LIME.ex(exId);
+    if (!ex || !ex.weighted || !targetReps) return null;
+    const last = lastSets(exId);
+    if (!last) return null;
+    const work = last.sets.filter((x) => x.kg > 0 && x.reps > 0);
+    if (!work.length) return null;
+    const kg = Math.max(...work.map((x) => x.kg));
+    const top = work.filter((x) => Math.abs(x.kg - kg) < 0.01);
+    const reps = top.map((x) => x.reps);
+    const step = STEP[ex.equipment] || STEP.dumbbell;
+    const stepShown = units === 'lb' ? step[1] : step[0];
+    const stepKg = units === 'lb' ? U.toKg(step[1], 'lb') : step[0];
+    const r2 = (n) => Math.round(n * 100) / 100;
+    if (reps.every((r) => r >= targetReps)) {
+      return { kind: 'up', kg: r2(kg + stepKg), from: kg, step: stepShown, reps, why: `You hit ${targetReps} reps on every set last time.` };
+    }
+    const short = reps.filter((r) => r < targetReps * 0.7).length;
+    if (short > reps.length / 2 && kg - stepKg > 0) {
+      return { kind: 'down', kg: r2(kg - stepKg), from: kg, step: stepShown, reps, why: `Last time: ${reps.join(', ')} reps. A little lighter to hit ${targetReps}.` };
+    }
+    return { kind: 'hold', kg, from: kg, step: 0, reps, why: `Last time: ${reps.join(', ')} reps. Hit ${targetReps} on every set to go up.` };
+  }
+
   function checklist() {
     const s = st();
     return [
@@ -141,5 +185,5 @@
     ];
   }
 
-  LIME.stats = { thisWeek, weeklyGoal, weekStreak, daysThisWeek, totals, weekly, heat, recordPRs, lastKg, checklist, e1rm };
+  LIME.stats = { thisWeek, weeklyGoal, weekStreak, daysThisWeek, totals, weekly, heat, recordPRs, lastKg, lastSets, suggest, checklist, e1rm };
 })();

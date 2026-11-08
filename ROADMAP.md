@@ -9,8 +9,8 @@ illustrations, progress, settings, backup/restore, demo mode, PWA offline.
 
 - [ ] Test on a real iPhone (Home Screen install, wake lock, audio unlock, safe areas) and get 3–5 real users before adding more
 - [ ] Real exercise video clips (short, silent, 300–800 KB loops) — record or license
-- [ ] Custom plan editor (reorder, add/remove exercises, change sets/reps/rest)
-- [ ] Progression suggestions ("you hit all reps last time — add 2.5 kg")
+- [x] Custom plan editor (reorder, add/remove exercises, change sets/reps/rest) — v0.5.0
+- [x] Progression suggestions ("you hit all reps last time — add 2.5 kg") — v0.5.0
 - [ ] Weekly recap share card (image)
 - [ ] Optional PIN screen lock (labelled as a lock, not encryption)
 - [ ] Body measurements and progress photos (stored locally)

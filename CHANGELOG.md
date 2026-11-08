@@ -4,6 +4,14 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.5.0 — 2026-11-08
+
+- Edit your plan: add, swap, remove and reorder exercises, change sets, reps
+  and rest, rename days, add or delete days.
+- Weight suggestions: go up when you hit every rep, stay or go lighter when
+  you don't. Turn off in Settings.
+- Changing your profile no longer overwrites a plan you edited.
+
 ## 0.4.4 — 2026-11-08
 
 - Every exercise photo now shows the same athlete: new photos for Russian

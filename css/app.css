@@ -527,3 +527,29 @@ body:has(.pl-foot) .toast, body:has(.sheet-foot) .toast, body:has(.ob-foot) .toa
 /* ---------- Refresh ---------- */
 .spin svg, .spin.ico svg { animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Plan editor (js/features/plan.js) ---------- */
+.sub-hd { display: flex; align-items: center; gap: 12px; padding: 4px 0 14px; }
+.sub-hd h1 { font-size: 1.9rem; }
+.sub-hd .sub { margin: 4px 0 0; color: var(--muted); font-size: .85rem; }
+.plan-card { display: flex; align-items: center; gap: 12px; }
+.plan-card .d { width: 38px; height: 38px; border-radius: 11px; flex: none; display: grid; place-items: center; background: rgba(255,255,255,.05); border: 1px solid var(--glass-hi); font-family: var(--font-disp); font-weight: var(--w-disp); font-size: 1.05rem; }
+.plan-card.next .d { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.plan-card small { display: block; color: var(--ink-2); font-size: .8rem; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.plan-card small.muted { color: var(--muted); }
+.tag.on { background: var(--accent-soft); color: var(--accent); }
+.item-row { padding: 6px 4px 6px 8px; gap: 4px; }
+.item-main { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; text-align: left; color: inherit; }
+.item-main strong { display: block; font-size: .95rem; }
+.item-main small { color: var(--muted); font-size: .78rem; }
+.move-btns { display: flex; flex-direction: column; }
+.move-btns .icon-btn { width: 44px; height: 36px; color: var(--ink-2); }
+.move-btns .icon-btn:disabled { opacity: .25; }
+
+/* ---------- Weight suggestion (player) ---------- */
+.sugg { display: flex; flex-direction: column; gap: 2px; margin-top: 12px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--glass-hi); background: rgba(255,255,255,.03); font-size: .85rem; color: var(--ink-2); }
+.sugg strong { display: flex; align-items: center; gap: 6px; color: var(--ink); font-weight: var(--w-med); }
+.sugg strong svg { width: 16px; height: 16px; }
+.sugg.up { border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: var(--accent-soft); }
+.sugg.up strong { color: var(--accent); }
+.sugg.down strong { color: #FFB86B; }

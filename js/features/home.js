@@ -45,10 +45,11 @@
         <div class="ex-list">${day.items.map((it) => {
           const ex = LIME.ex(it.exId);
           const last = ex.weighted ? LIME.stats.lastKg(ex.id) : 0;
+          const sg = s.settings.suggest !== false && !it.secs ? LIME.stats.suggest(ex.id, it.reps, units) : null;
           return `<button type="button" class="ex-item" data-ex="${ex.id}">
             <span class="ex-thumb">${LIME.media(ex, { still: true })}</span>
             <span class="grow"><strong>${U.esc(ex.name)}</strong>
-              <small>${it.sets} × ${it.secs ? it.secs + ' s' : it.reps + ' reps'}${it.rest ? ` · rest ${it.rest} s` : ''}${last ? ` · last ${U.fmtNum(U.kgTo(last, units), 1)} ${units}` : ''}</small>
+              <small>${it.sets} × ${it.secs ? it.secs + ' s' : it.reps + ' reps'}${it.rest ? ` · rest ${it.rest} s` : ''}${sg ? ` · ${sg.kind === 'up' ? 'up to' : sg.kind === 'down' ? 'down to' : 'stay at'} ${U.fmtNum(U.kgTo(sg.kg, units), 1)} ${units}` : last ? ` · last ${U.fmtNum(U.kgTo(last, units), 1)} ${units}` : ''}</small>
               ${it.warmup ? '<span class="tag">Warm-up</span>' : it.cooldown ? '<span class="tag">Cool-down</span>' : ''}</span>
             <span class="ico chev">${LIME.icon('chev')}</span></button>`;
         }).join('')}</div>`,
@@ -109,7 +110,7 @@
           <span class="tick">${x.done ? LIME.icon('check') : ''}</span><span class="txt grow">${U.esc(x.label)}</span>
           ${x.done ? '' : `<span class="ico chev muted">${LIME.icon('chev')}</span>`}</a>`).join('')}</div>` : ''}
 
-      <div class="section-title"><h2>Your week</h2><a href="#/settings/plan" class="link-btn">Edit</a></div>
+      <div class="section-title"><h2>Your week</h2><a href="#/plan" class="link-btn">Edit</a></div>
       <div class="card">${s.plan.days.map((d, i) => `<a class="plan-day${d === day ? ' next' : ''}" href="#/home" data-preview="${d.id}">
           <span class="d">${i + 1}</span>
           <span class="grow"><strong>${U.esc(d.title)}</strong><br><span class="muted small">${U.esc(d.focus)} · ~${U.esc(U.fmtDur(LIME.planner.estimate(d)))}</span></span>

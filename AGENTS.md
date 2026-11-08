@@ -35,7 +35,7 @@ tools/build-art.py      turns 1200×1200 transparent PNGs into media/ex/*.webp +
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio
 js/data/                exercises, figures (key poses + SVG fallback drawings), planner
 js/ui/                  icons, toast, sheet, charts, body3d (anatomical 3D figures)
-js/features/            stats, onboarding, home, library, player, progress, settings
+js/features/            stats, onboarding, home, library, player, plan (editor), progress, settings
 js/app.js               boot, router, look, What's new, backup reminder, self-check
 tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 .github/workflows/      CI: tests gate the Pages deploy
@@ -52,6 +52,8 @@ tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 | Change how plans are built                   | `js/data/planner.js` (`SLOTS`, `DAYS`, `SPLITS`, `GOALS`, `SIZE`) |
 | Add a saved field                            | `js/core/store.js` → `defaults()` **and** `migrate()` |
 | Change the workout flow                      | `js/features/player.js` |
+| Change the plan editor                       | `js/features/plan.js` (routes `#/plan`, `#/plan/<dayId>`) |
+| Change weight-suggestion rules               | `js/features/stats.js` → `suggest()` (step sizes in `STEP`) |
 | Change streak / PR / volume maths            | `js/features/stats.js` |
 | Add a screen                                 | new file in `js/features/`, route in `js/app.js` `ROUTES`, script tag in `index.html`, asset in `sw.js` |
 | Show a notice                                | `LIME.toast(title, { body, kind, undo, action })` |
@@ -111,6 +113,8 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
 - IndexedDB writes are async; `store.flushSync()` mirrors state to
   localStorage on `pagehide` so a closed app doesn't lose the last set.
   `load()` takes whichever copy has the newer `savedAt`.
+- **Edited plans:** any editor change sets `plan.edited`; profile changes then
+  keep the plan instead of rebuilding it. `planner.build()` returns `edited: false`.
 - **Demo order:** video → photos (`LIME.ART`, if Settings → Exercise demos is
   Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
 - Exercise photos are AI-generated prototypes supplied by the owner; four had a

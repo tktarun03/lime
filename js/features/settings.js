@@ -53,7 +53,8 @@
 
       <div class="section-title"><h2>Training</h2></div>
       <div class="set-group">
-        ${row({ icon: 'calendar', label: 'Plan', sub: s.plan.days.map((d) => d.title).join(' · '), href: '#/settings/plan' })}
+        ${row({ icon: 'calendar', label: 'Edit plan', sub: s.plan.days.map((d) => d.title).join(' · ') + (s.plan.edited ? ' · edited' : ''), href: '#/plan' })}
+        ${row({ icon: 'up', label: 'Weight suggestions', sub: 'Go up when you hit every rep', toggle: 'suggest' })}
         ${row({ icon: 'sound', label: 'Beeps', sub: 'Countdown and rest-over sounds', toggle: 'sound' })}
         ${row({ icon: 'user', label: 'Voice cues', sub: 'Says each exercise and rest out loud', toggle: 'voice' })}
         ${row({ icon: 'clock', label: '3-2-1 before starting', toggle: 'countdown' })}
@@ -131,7 +132,7 @@
     const sub = parts && parts[1];
     if (sub) {
       history.replaceState(null, '', '#/settings');
-      ({ profile: profileSheet, plan: planSheet, install: installSheet, sensors: sensorsSheet, versions: versionsSheet, check: checkSheet, backup: () => backup(view) })[sub]?.(view);
+      ({ profile: profileSheet, plan: () => { location.hash = '#/plan'; }, install: installSheet, sensors: sensorsSheet, versions: versionsSheet, check: checkSheet, backup: () => backup(view) })[sub]?.(view);
     }
   }
 
@@ -186,38 +187,14 @@
       });
       const planChanged = ['goal', 'level', 'days', 'minutes'].some((k) => old[k] !== next[k]) || old.equipment.slice().sort().join() !== next.equipment.slice().sort().join();
       const before = { profile: JSON.parse(JSON.stringify(old)), plan: JSON.parse(JSON.stringify(st().plan)) };
-      LIME.store.update((x) => { x.profile = next; if (planChanged) x.plan = LIME.planner.build(next); });
+      const keepEdits = planChanged && st().plan.edited;
+      LIME.store.update((x) => { x.profile = next; if (planChanged && !keepEdits) x.plan = LIME.planner.build(next); });
       sh.close(true);
       render(view);
-      LIME.toast(planChanged ? 'Profile saved, plan rebuilt' : 'Profile saved', { kind: 'good', undo: () => {
+      LIME.toast(keepEdits ? 'Profile saved' : planChanged ? 'Profile saved, plan rebuilt' : 'Profile saved', { kind: 'good', body: keepEdits ? 'Your edited plan was kept. Reset it from Edit plan.' : '', undo: () => {
         LIME.store.update((x) => { x.profile = before.profile; x.plan = before.plan; });
         if (location.hash.startsWith('#/settings')) render(view);
       } });
-    };
-  }
-
-  // ---------- Plan ----------
-  function planSheet(view) {
-    const plan = st().plan;
-    const sh = LIME.sheet.open({
-      title: 'Your plan',
-      body: `${plan.days.map((d, i) => `<div class="card" style="margin-bottom:10px">
-          <div class="row between"><strong>Day ${i + 1} · ${U.esc(d.title)}</strong><span class="tiny muted">~${U.esc(U.fmtDur(LIME.planner.estimate(d)))}</span></div>
-          <div class="small muted" style="margin-top:6px">${d.items.map((it) => U.esc(LIME.ex(it.exId).name)).join(' · ')}</div></div>`).join('')}
-        <p class="tiny muted">Up next: Day ${(plan.next % plan.days.length) + 1}. To change what's in the plan, edit your goal, days, minutes or equipment in Profile.</p>`,
-      foot: `<div class="row"><button type="button" class="btn btn-ghost grow" data-skipday>Skip to next day</button><button type="button" class="btn grow" data-rebuild>Rebuild</button></div>`
-    });
-    U.$('[data-skipday]', sh.el).onclick = () => {
-      const prev = plan.next;
-      LIME.store.update((x) => { x.plan.next = (x.plan.next + 1) % x.plan.days.length; });
-      sh.close(true);
-      LIME.toast(`Next up: ${st().plan.days[st().plan.next].title}`, { undo: () => LIME.store.update((x) => { x.plan.next = prev; }) });
-    };
-    U.$('[data-rebuild]', sh.el).onclick = () => {
-      const before = JSON.parse(JSON.stringify(st().plan));
-      LIME.store.update((x) => { x.plan = LIME.planner.build(x.profile); });
-      sh.close(true); render(view);
-      LIME.toast('Plan rebuilt', { body: 'Starts again from Day 1', undo: () => { LIME.store.update((x) => { x.plan = before; }); if (location.hash.startsWith('#/settings')) render(view); } });
     };
   }
 

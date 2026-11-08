@@ -120,7 +120,7 @@
       return { id: 'd' + (i + 1), key, title: tpl.title, focus: tpl.focus, items };
     });
 
-    return { createdAt: Date.now(), days: out, next: 0 };
+    return { createdAt: Date.now(), days: out, next: 0, edited: false };
   }
 
   /** Rough duration in seconds: ~3 s per rep, plus rests, plus set-up time. */
@@ -145,5 +145,15 @@
     return list.slice(0, 6);
   }
 
-  LIME.planner = { build, estimate, alternatives, GOALS, canDo };
+  /** Sets/reps/rest for one exercise, the same way build() would choose them. */
+  function defaultItem(exId, profile) {
+    const ex = LIME.ex(exId);
+    const g = GOALS[profile.goal] || GOALS.general;
+    const size = SIZE[profile.minutes] || SIZE[30];
+    const sets = LIME.U.clamp(size[1] + g.sets + (profile.level === 'advanced' ? 1 : 0), 1, 5);
+    const rest = ex.weighted ? g.rest : Math.min(g.rest, 60);
+    return Object.assign({ exId, sets: ex.group === 'cardio' ? Math.max(1, sets - 1) : sets, rest }, targetFor(ex, profile.goal, profile.level));
+  }
+
+  LIME.planner = { build, estimate, alternatives, defaultItem, GOALS, canDo };
 })();

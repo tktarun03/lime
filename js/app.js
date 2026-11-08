@@ -14,6 +14,7 @@
     progress: { render: (v, p) => LIME.progress.render(v, p), tabs: true, tab: 'progress' },
     settings: { render: (v, p) => LIME.settings.render(v, p), tabs: true, tab: 'settings' },
     onboarding: { render: (v) => LIME.onboarding.render(v), tabs: false },
+    plan: { render: (v, p) => LIME.planEditor.render(v, p), tabs: false },
     workout: { render: (v) => LIME.player.render(v), tabs: false },
     start: { render: () => { const d = LIME.home.nextDay(); if (d) LIME.player.start(d.id); }, tabs: false }
   };

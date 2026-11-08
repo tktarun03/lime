@@ -27,6 +27,7 @@
         keepAwake: true,
         body3d: true,         // kept for old backups; superseded by demo
         demo: 'photo',        // photo | 3d | flat
+        suggest: true,        // weight suggestions in the player
         accent: 'lime',
         text: 'm',            // system | s | m | l | xl
         restDefault: 60
@@ -49,6 +50,8 @@
     const out = Object.assign({}, d, s);
     out.settings = Object.assign({}, d.settings, s.settings || {});
     out.ui = Object.assign({}, d.ui, s.ui || {});
+    // v0.5: plans can be edited; edited plans are not rebuilt by profile changes
+    if (out.plan && typeof out.plan.edited !== 'boolean') out.plan.edited = false;
     // v0.4: demo style replaces the 3D on/off switch
     if (!(s.settings && s.settings.demo)) out.settings.demo = out.settings.body3d === false ? 'flat' : 'photo';
     if (!['photo', '3d', 'flat'].includes(out.settings.demo)) out.settings.demo = 'photo';

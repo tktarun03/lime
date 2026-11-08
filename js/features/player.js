@@ -82,11 +82,25 @@
 
   function doneFor(idx) { const a = st().active; return a.log.filter((l) => l.itemIdx === idx).length; }
 
-  function prefillKg(ex) {
+  function suggestion(ex, it) {
+    if (st().settings.suggest === false || !ex.weighted || it.secs) return null;
+    return LIME.stats.suggest(ex.id, it.reps, units());
+  }
+
+  function prefillKg(ex, it) {
     const a = st().active;
     const mine = a.log.filter((l) => l.exId === ex.id && l.kg > 0);
     if (mine.length) return mine[mine.length - 1].kg;
-    return LIME.stats.lastKg(ex.id);
+    const s = suggestion(ex, it);
+    return s ? s.kg : LIME.stats.lastKg(ex.id);
+  }
+
+  function suggestChip(s) {
+    if (!s) return '';
+    const u = units();
+    const w = U.fmtNum(Math.round(U.kgTo(s.kg, u) * 10) / 10, 1);
+    const head = s.kind === 'up' ? `${LIME.icon('up')} Go up +${s.step} ${u}` : s.kind === 'down' ? `${LIME.icon('down')} Go lighter −${s.step} ${u}` : `${LIME.icon('equal')} Stay at ${w} ${u}`;
+    return `<div class="sugg ${s.kind}" role="note"><strong>${head}</strong><span>${U.esc(s.why)}</span></div>`;
   }
 
   function nextLabel() {
@@ -103,7 +117,9 @@
     const total = a.items.length;
     const isTime = !!it.secs;
     const weighted = !!ex.weighted;
-    if (draftKg == null || draftKg.exId !== ex.id) draftKg = { exId: ex.id, kg: prefillKg(ex) };
+    if (draftKg == null || draftKg.exId !== ex.id) draftKg = { exId: ex.id, kg: prefillKg(ex, it) };
+    const firstSet = a.setIdx === 0 && !a.log.some((l) => l.exId === ex.id);
+    const sugg = firstSet ? suggestion(ex, it) : null;
     if (draftReps == null || draftReps.key !== `${a.idx}:${a.setIdx}`) draftReps = { key: `${a.idx}:${a.setIdx}`, reps: it.reps || 0 };
     const kgShown = Math.round(U.kgTo(draftKg.kg, units()) * 10) / 10;
 
@@ -132,6 +148,7 @@
         </div>
         <div class="sets" aria-label="Sets">${Array.from({ length: it.sets }, (_, i) =>
           `<span class="${i < a.setIdx ? 'done' : i === a.setIdx ? 'cur' : ''}">${i < a.setIdx ? LIME.icon('check').replace('<svg', '<svg width="14" height="14"') : 'SET ' + (i + 1)}</span>`).join('')}</div>
+        ${suggestChip(sugg)}
         ${!isTime ? `<div class="${weighted ? 'grid-2' : ''}" style="margin-top:14px">
           ${weighted ? `<div><div class="stepper">
               <button type="button" data-kg="-1" aria-label="Less weight">−</button>

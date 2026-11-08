@@ -21,7 +21,8 @@
     opts = opts || {};
     const root = document.getElementById('toast-root');
     if (!root) return null;
-    if (current) { clearTimeout(current._t); current.remove(); current = null; }
+    if (current) { clearTimeout(current._t); current = null; }
+    root.querySelectorAll('.toast').forEach((t) => { clearTimeout(t._t); t.remove(); }); // incl. ones still sliding out
 
     const hasBtn = !!(opts.undo || opts.action);
     const ms = opts.ms || (hasBtn ? 7000 : opts.kind === 'bad' ? 6000 : 4500);

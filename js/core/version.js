@@ -2,8 +2,17 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.4.4',
+  VERSION: '0.5.0',
   RELEASES: [
+    {
+      version: '0.5.0',
+      date: '2026-11-08',
+      notes: [
+        'Edit your plan: add, swap, remove and reorder exercises, change sets, reps and rest, rename days, add or delete days.',
+        'Weight suggestions: go up when you hit every rep, stay or go lighter when you don\'t. Turn off in Settings.',
+        'Changing your profile no longer overwrites a plan you edited.'
+      ]
+    },
     {
       version: '0.4.4',
       date: '2026-11-08',

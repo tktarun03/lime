@@ -292,3 +292,110 @@ test('refresh button reloads, keeps data and says it is up to date', async ({ pa
   await page.waitForLoadState('load');
   await expect(page.locator('.toast')).toContainText('Up to date', { timeout: 5000 });
 });
+
+test('plan editor: add, edit, reorder, remove with undo; workout uses the edits', async ({ page }) => {
+  const errs = errorsOf(page);
+  await onboard(page, { equipment: ['dumbbell'] });
+  await page.click('a[href="#/plan"]');
+  await expect(page.locator('.plan-card')).toHaveCount(3);
+  await noHorizontalScroll(page);
+  await page.locator('.plan-card').first().click();
+  await expect(page).toHaveURL(/#\/plan\/d1/);
+  const count = () => page.evaluate(() => LIME.store.state.plan.days[0].items.length);
+  const n0 = await count();
+  // add an exercise
+  await page.click('[data-add]');
+  await page.fill('#pk-q', 'curl');
+  await page.locator('[data-pick="db-curl"]').click();
+  await expect(page.locator('.toast')).toContainText('Added Dumbbell Curl');
+  expect(await count()).toBe(n0 + 1);
+  expect(await page.evaluate(() => LIME.store.state.plan.edited)).toBe(true);
+  // move it up one
+  const last = n0;
+  await page.click(`[data-up="${last}"]`);
+  expect(await page.evaluate((i) => LIME.store.state.plan.days[0].items[i].exId, last - 1)).toBe('db-curl');
+  // edit sets and rest
+  await page.click(`[data-edit="${last - 1}"]`);
+  await page.fill('#it-sets', '5');
+  await page.click('[data-step="rest"][data-d="1"]');
+  await page.click('[data-save]');
+  const it = await page.evaluate((i) => LIME.store.state.plan.days[0].items[i], last - 1);
+  expect(it.sets).toBe(5);
+  // remove + undo
+  await page.click(`[data-edit="${last - 1}"]`);
+  await page.click('[data-remove]');
+  expect(await count()).toBe(n0);
+  await page.click('.toast .t-btn');
+  expect(await count()).toBe(n0 + 1);
+  // rename
+  await page.fill('#day-title', 'Arms day');
+  await page.press('#day-title', 'Enter');
+  await expect(page.locator('.toast')).toContainText('Day renamed');
+  // start this day: player shows the edited plan
+  await page.click('[data-start]');
+  const active = await page.evaluate(() => LIME.store.state.active);
+  expect(active.title).toBe('Arms day');
+  expect(active.items.some((x) => x.exId === 'db-curl' && x.sets === 5)).toBe(true);
+  expect(errs).toEqual([]);
+});
+
+test('plan editor: add and delete a day, profile change keeps an edited plan', async ({ page }) => {
+  await onboard(page, { days: 3 });
+  await page.goto('/#/plan');
+  await page.click('[data-add-day]');
+  await expect(page).toHaveURL(/#\/plan\/d/);
+  expect(await page.evaluate(() => LIME.store.state.plan.days.length)).toBe(4);
+  await page.click('[data-del-day]');
+  await expect(page).toHaveURL(/#\/plan$/);
+  expect(await page.evaluate(() => LIME.store.state.plan.days.length)).toBe(3);
+  // change days in profile: edited plan is kept
+  await page.goto('/#/settings');
+  await page.click('.card-link');
+  await page.selectOption('#pf-days', '5');
+  await page.click('[data-save]');
+  await expect(page.locator('.toast')).toContainText('Your edited plan was kept');
+  expect(await page.evaluate(() => LIME.store.state.plan.days.length)).toBe(3);
+  // reset to suggested plan follows the new profile
+  await page.goto('/#/plan');
+  await page.evaluate(() => LIME.toast.clear());
+  await page.click('[data-reset]');
+  await page.click('[data-yes]');
+  expect(await page.evaluate(() => [LIME.store.state.plan.days.length, LIME.store.state.plan.edited])).toEqual([5, false]);
+});
+
+test('weight suggestions: up after every rep, hold after misses, shown in the player', async ({ page }) => {
+  await onboard(page, { equipment: ['dumbbell'] });
+  const res = await page.evaluate(() => {
+    const mk = (reps, kg) => ({ id: 'x' + Math.random(), dayId: 'd1', title: 'T', start: Date.now() - 1e6, end: Date.now() - 9e5, durationSec: 100,
+      sets: reps.map((r, i) => ({ exId: 'goblet-squat', setNo: i + 1, reps: r, secs: 0, kg, done: true })), volumeKg: 0, prs: [] });
+    const out = {};
+    LIME.store.state.sessions = [mk([10, 10, 10], 20)];
+    out.up = LIME.stats.suggest('goblet-squat', 10, 'kg');
+    LIME.store.state.sessions = [mk([10, 8, 7], 20)];
+    out.hold = LIME.stats.suggest('goblet-squat', 10, 'kg');
+    LIME.store.state.sessions = [mk([5, 4, 6], 20)];
+    out.down = LIME.stats.suggest('goblet-squat', 10, 'kg');
+    out.body = LIME.stats.suggest('pushup', 10, 'kg');
+    LIME.store.state.sessions = [mk([10, 10, 10], 20)];
+    out.lb = LIME.stats.suggest('goblet-squat', 10, 'lb');
+    return out;
+  });
+  expect([res.up.kind, res.up.kg]).toEqual(['up', 22]);
+  expect([res.hold.kind, res.hold.kg]).toEqual(['hold', 20]);
+  expect([res.down.kind, res.down.kg]).toEqual(['down', 18]);
+  expect(res.body).toBeNull();
+  expect(res.lb.step).toBe(5);
+  // player: goblet squat is first after the warm-up; chip + prefilled weight
+  await page.evaluate(() => LIME.store.save());
+  const day = await page.evaluate(() => LIME.store.state.plan.days.find((d) => d.items.some((i) => i.exId === 'goblet-squat')).id);
+  await page.evaluate((id) => LIME.player.start(id), day);
+  await page.locator('.countdown').click();
+  for (let i = 0; i < 8; i++) {
+    if (await page.locator('.pl-name', { hasText: 'Goblet Squat' }).count()) break;
+    if (await page.locator('[data-timer]').count()) { await page.click('[data-timer]'); await page.click('[data-timer]'); }
+    else { await page.click('[data-more]'); await page.click('[data-skip-ex]'); }
+    if (await page.locator('.rest [data-skip]').count()) await page.click('.rest [data-skip]');
+  }
+  await expect(page.locator('.sugg.up')).toContainText('+2 kg');
+  await expect(page.locator('#pl-kg')).toHaveValue('22');
+});
