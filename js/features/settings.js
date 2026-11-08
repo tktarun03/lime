@@ -86,7 +86,8 @@
 
       <div class="section-title"><h2>About</h2></div>
       <div class="set-group">
-        ${row({ icon: 'sparkle', label: 'Version history', val: 'v' + LIME.VERSION, href: '#/settings/versions' })}
+        ${row({ icon: 'refresh', label: 'Refresh app', sub: 'Reload and check for updates. Your data stays.', val: 'v' + LIME.VERSION, attr: 'data-refresh' })}
+        ${row({ icon: 'sparkle', label: 'Version history', href: '#/settings/versions' })}
         ${row({ icon: 'check', label: 'Self-check', sub: 'Test storage, timers and data on this phone', href: '#/settings/check' })}
       </div>
       <p class="tiny muted" style="text-align:center;margin-top:20px">LIME v${LIME.VERSION} · data stored on this device only (${U.esc(LIME.store.backend)})</p>
@@ -118,6 +119,7 @@
       LIME.store.update((x) => { x.settings.text = b.getAttribute('data-text'); });
       LIME.app.applyLook(); render(view);
     });
+    U.$('[data-refresh]', view).onclick = (e) => LIME.app.refresh(e.currentTarget.querySelector('.ico'));
     U.$('[data-backup]', view).onclick = () => backup(view);
     const file = U.$('#restore-file', view);
     U.$('[data-restore]', view).onclick = () => file.click();

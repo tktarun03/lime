@@ -280,3 +280,15 @@ test('old 3D switch migrates to the demo style', async ({ page }) => {
   ]);
   expect(out).toEqual(['flat', 'photo', 'photo', '3d']);
 });
+
+test('refresh button reloads, keeps data and says it is up to date', async ({ page }) => {
+  await onboard(page, { name: 'Kai' });
+  await page.click('[data-refresh]');
+  await page.waitForLoadState('load');
+  await expect(page.locator('.toast')).toContainText('Up to date', { timeout: 5000 });
+  expect(await page.evaluate(() => LIME.store.state.profile.name)).toBe('Kai');
+  await page.goto('/#/settings');
+  await page.click('.set-row[data-refresh]');
+  await page.waitForLoadState('load');
+  await expect(page.locator('.toast')).toContainText('Up to date', { timeout: 5000 });
+});

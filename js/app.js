@@ -123,9 +123,54 @@
     return out;
   }
 
+  // ---------- Refresh / check for updates ----------
+  // Asks the server for the newest version, lets the service worker pick up
+  // new files, saves, then reloads. After the reload, afterBoot() says whether
+  // the app was updated or was already up to date. Data is never touched.
+  let refreshing = false;
+  async function refresh(btn) {
+    if (refreshing) return;
+    refreshing = true;
+    if (btn) { btn.classList.add('spin'); btn.setAttribute('aria-busy', 'true'); }
+    let latest = null;
+    try {
+      const r = await fetch('js/core/version.js?check=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) { const m = (await r.text()).match(/VERSION:\s*'([^']+)'/); if (m) latest = m[1]; }
+    } catch (e) { /* offline or blocked */ }
+    if (!latest && navigator.onLine === false) {
+      refreshing = false;
+      if (btn) { btn.classList.remove('spin'); btn.removeAttribute('aria-busy'); }
+      LIME.toast("You're offline", { kind: 'bad', body: 'Connect to the internet to check for updates.' });
+      return;
+    }
+    try {
+      const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+      if (reg) await Promise.race([reg.update(), new Promise((r) => setTimeout(r, 4000))]);
+    } catch (e) { /* ignore */ }
+    try { await LIME.store.save(); } catch (e) { /* ignore */ }
+    LIME.store.flushSync();
+    try { sessionStorage.setItem('lime.refresh', JSON.stringify({ from: LIME.VERSION, latest })); } catch (e) { /* ignore */ }
+    location.reload();
+  }
+
+  /** After a refresh-triggered reload: say what happened. Returns true if a notice was shown. */
+  function refreshResult() {
+    let flag = null;
+    try { flag = JSON.parse(sessionStorage.getItem('lime.refresh') || 'null'); sessionStorage.removeItem('lime.refresh'); } catch (e) { /* ignore */ }
+    if (!flag) return false;
+    if (flag.from !== LIME.VERSION) return false; // the normal "Updated to version" notice covers it
+    if (flag.latest && flag.latest !== LIME.VERSION) {
+      LIME.toast('Update still on its way', { body: `Version ${flag.latest} is out. Try again in a minute.`, action: { label: 'Refresh', fn: () => refresh() } });
+    } else {
+      LIME.toast('Up to date', { kind: 'good', body: `You have the latest version (${LIME.VERSION}).` });
+    }
+    return true;
+  }
+
   function afterBoot() {
     const s = st();
     if (!s.profile) return;
+    if (refreshResult()) return;
     // What's new — once per version, not on first install
     if (s.ui.lastVersionSeen && s.ui.lastVersionSeen !== LIME.VERSION) {
       const rel = LIME.RELEASES[0];
@@ -174,6 +219,6 @@
     }
   }
 
-  LIME.app = { route, applyLook, shrinkPhoto, share, selfCheck, setCleanup, boot };
+  LIME.app = { route, applyLook, shrinkPhoto, share, selfCheck, setCleanup, boot, refresh };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

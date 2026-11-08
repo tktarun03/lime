@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.4.3 — 2026-11-08
+
+- New Refresh button on Home and in Settings: reloads the app and gets the
+  latest version. Your data stays.
+
 ## 0.4.2 — 2026-11-08
 
 - New photos for back squat, bench press, overhead press, calf raise and

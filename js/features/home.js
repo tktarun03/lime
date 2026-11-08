@@ -79,7 +79,10 @@
       <header class="home-hd">
         <div><div class="eyebrow">${U.esc(U.greet())}</div>
           <h1 class="disp slant">${U.esc(p.name)}</h1></div>
-        <a href="#/settings/profile" class="avatar" aria-label="Profile">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc(initial)}</a>
+        <div class="row" style="gap:8px">
+          <button type="button" class="icon-btn" data-refresh aria-label="Refresh and check for updates">${LIME.icon('refresh')}</button>
+          <a href="#/settings/profile" class="avatar" aria-label="Profile">${p.photo ? `<img src="${p.photo}" alt="">` : U.esc(initial)}</a>
+        </div>
       </header>
 
       ${s.active ? `<div class="card accent row" style="margin-bottom:12px">
@@ -115,6 +118,7 @@
       <div class="card tex" style="margin-top:12px"><div class="eyebrow">Today's line</div><p class="quote slant" style="margin:8px 0 0">${U.esc(line)}</p></div>
     `;
 
+    U.$('[data-refresh]', view).onclick = (e) => LIME.app.refresh(e.currentTarget);
     U.$$('[data-preview]', view).forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); preview(b.getAttribute('data-preview')); }));
     const hide = U.$('[data-hide-list]', view);
     if (hide) hide.onclick = () => {

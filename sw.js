@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.4.2';
+const VERSION = '0.4.3';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 
@@ -58,7 +58,7 @@ self.addEventListener('fetch', (e) => {
   if (isPage) {
     // network-first so a new release shows up; cache when offline
     e.respondWith(
-      fetch(req).then((res) => {
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put('index.html', copy));
         return res;

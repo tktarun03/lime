@@ -523,3 +523,7 @@ body:has(.pl-foot) .toast, body:has(.sheet-foot) .toast, body:has(.ob-foot) .toa
 .hero-fig .photo { aspect-ratio: 1 / 1.15; height: auto; }
 .slide .art .photo { width: 86%; max-width: 380px; aspect-ratio: 1 / 1.1; height: auto; }
 .stage .photo img { inset: 6% 6% 7%; width: 88%; height: 87%; }
+
+/* ---------- Refresh ---------- */
+.spin svg, .spin.ico svg { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

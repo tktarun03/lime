@@ -35,6 +35,7 @@
     info: S('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'),
     download: S('<path d="M12 4v12M6 10l6 6 6-6M4 20h16"/>'),
     upload: S('<path d="M12 20V8M6 14l6-6 6 6M4 4h16"/>'),
+    refresh: S('<path d="M20 11a8 8 0 0 0-14.6-4.5L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.6 4.5L20 16"/><path d="M20 21v-5h-5"/>'),
     share: S('<path d="M12 3v13M7 8l5-5 5 5"/><path d="M5 12v8h14v-8"/>'),
     target: S('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'),
     sound: S('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/>'),
