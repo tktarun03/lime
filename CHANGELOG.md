@@ -4,6 +4,12 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.4.1 — 2026-11-08
+
+- Five exercises renamed and rewritten to match their photos: Tempo Squat
+  (was Jump Squat), Dumbbell Deadlift (was Barbell Deadlift), Seated Dumbbell
+  Press, One-Arm Dumbbell Row and Seated Band Row.
+
 ## 0.4.0 — 2026-11-08
 
 - Every exercise now shows real photos of the start and end position.

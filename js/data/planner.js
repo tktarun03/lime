@@ -7,7 +7,7 @@
   const SLOTS = {
     warm: ['jacks', 'high-knees'],
     squat: ['back-squat', 'goblet-squat', 'squat', 'box-squat'],
-    hinge: ['deadlift', 'rdl', 'kb-swing', 'glute-bridge'],
+    hinge: ['deadlift', 'rdl', 'kb-swing', 'glute-bridge'],   // deadlift = dumbbell version (matches its photos)
     hinge2: ['kb-swing', 'glute-bridge', 'rdl'],
     lunge: ['db-lunge', 'lunge'],
     hpush: ['bench-press', 'db-bench', 'pushup', 'band-press', 'knee-pushup'],

@@ -2,8 +2,15 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.4.0',
+  VERSION: '0.4.1',
   RELEASES: [
+    {
+      version: '0.4.1',
+      date: '2026-11-08',
+      notes: [
+        'Five exercises renamed and rewritten to match their photos: Tempo Squat, Dumbbell Deadlift, Seated Dumbbell Press, One-Arm Dumbbell Row and Seated Band Row.'
+      ]
+    },
     {
       version: '0.4.0',
       date: '2026-11-08',

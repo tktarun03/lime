@@ -41,4 +41,5 @@ illustrations, progress, settings, backup/restore, demo mode, PWA offline.
 | 2026-11-07 | English only for v0.1 | Translation table to be added with the first second language. |
 | 2026-11-08 | Exercise photos (start/end pairs) are the default demo | Owner supplied all 35; 3D and drawings stay selectable in Settings. Logos retouched out of 3 images. |
 | 2026-11-08 | Photos as WebP, cropped per pair, ~37 KB each | 21 MB of PNGs → 2.7 MB; cached on first view, not precached. |
+| 2026-11-08 | Exercise text follows the photos | Jump Squat → Tempo Squat (id kept), deadlift is now the dumbbell version (barbell users get no barbell deadlift until a photo exists), db-press seated, db-row one-arm, band-row seated. |
 | 2026-11-07 | No health-data integration | Not possible from a web app; planned for a native wrapper. |
