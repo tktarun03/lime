@@ -115,7 +115,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
   Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
 - Exercise photos are AI-generated prototypes supplied by the owner; four had a
   sportswear logo retouched out. Re-check new batches for logos before adding.
-  Goal: one athlete (the woman) in every photo — 5 moves still show a man:
-  russian-twist, climber, high-knees, ham-stretch, hip-flexor.
+  All 35 now show the same athlete. Open photo issues: high-knees and climber
+  start/end are nearly identical (same knee up), so their loop barely moves —
+  need an end photo with the other knee. russian-twist-b was supplied mirrored
+  and is flipped back during import.
 - SMIL animations in figures: fine in Safari/Chrome; turned off for
   `prefers-reduced-motion`.

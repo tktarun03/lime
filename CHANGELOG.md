@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.4.4 — 2026-11-08
+
+- Every exercise photo now shows the same athlete: new photos for Russian
+  twist, mountain climber, high knees, hamstring stretch and hip flexor stretch.
+
 ## 0.4.3 — 2026-11-08
 
 - New Refresh button on Home and in Settings: reloads the app and gets the
