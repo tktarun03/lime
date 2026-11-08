@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.4.2 — 2026-11-08
+
+- New photos for back squat, bench press, overhead press, calf raise and
+  superman, with the same athlete as the other moves.
+
 ## 0.4.1 — 2026-11-08
 
 - Five exercises renamed and rewritten to match their photos: Tempo Squat

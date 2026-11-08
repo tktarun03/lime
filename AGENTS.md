@@ -113,7 +113,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
   `load()` takes whichever copy has the newer `savedAt`.
 - **Demo order:** video → photos (`LIME.ART`, if Settings → Exercise demos is
   Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
-- Exercise photos are AI-generated prototypes supplied by the owner; three had a
+- Exercise photos are AI-generated prototypes supplied by the owner; four had a
   sportswear logo retouched out. Re-check new batches for logos before adding.
+  Goal: one athlete (the woman) in every photo — 5 moves still show a man:
+  russian-twist, climber, high-knees, ham-stretch, hip-flexor.
 - SMIL animations in figures: fine in Safari/Chrome; turned off for
   `prefers-reduced-motion`.

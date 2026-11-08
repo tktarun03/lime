@@ -5,13 +5,13 @@
 (function () {
   'use strict';
   LIME.ART = {
-    'back-squat': [432, 760],
+    'back-squat': [393, 760],
     'band-press': [388, 760],
     'band-row': [760, 558],
     'bb-row': [501, 760],
-    'bench-press': [760, 661],
+    'bench-press': [760, 630],
     'box-squat': [540, 760],
-    'calf-raise': [186, 760],
+    'calf-raise': [202, 760],
     'climber': [760, 437],
     'crunch': [760, 308],
     'db-bench': [760, 592],
@@ -31,7 +31,7 @@
     'knee-pushup': [760, 437],
     'lunge': [625, 760],
     'neg-pullup': [502, 760],
-    'ohp': [256, 760],
+    'ohp': [369, 760],
     'pike-pushup': [760, 629],
     'plank': [760, 359],
     'pullup': [502, 760],
@@ -39,6 +39,6 @@
     'rdl': [452, 760],
     'russian-twist': [760, 563],
     'squat': [482, 760],
-    'superman': [760, 235]
+    'superman': [760, 181]
   };
 })();
