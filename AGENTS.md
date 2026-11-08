@@ -29,7 +29,9 @@ css/app.css             all styles; tokens at the top
 fonts/                  self-hosted variable Oswald + Inter (OFL) — no Google Fonts requests
 vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
 icons/                  app icons (svg + png); favicon.ico at root
+media/ex/               exercise photos: <id>-a.webp (start), -b.webp (end), -t.webp (thumb)
 media/                  optional exercise video clips (see media/README.md)
+tools/build-art.py      turns 1200×1200 transparent PNGs into media/ex/*.webp + js/data/art.js
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio
 js/data/                exercises, figures (key poses + SVG fallback drawings), planner
 js/ui/                  icons, toast, sheet, charts, body3d (anatomical 3D figures)
@@ -44,6 +46,7 @@ tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 | I want to…                                   | Go to |
 |----------------------------------------------|-------|
 | Add or edit an exercise                      | `js/data/exercises.js` (fields documented at the top) |
+| Add or replace exercise photos               | put `<id>-a.png` / `<id>-b.png` (1200×1200, transparent) in a folder, run `python3 tools/build-art.py <folder> media/ex js/data/art.js` |
 | Add a video clip for an exercise             | put MP4 in `media/`, set `video: 'media/<id>.mp4'` |
 | Draw a new movement illustration             | `js/data/figures.js` → add a pattern with poses `a` and `b` |
 | Change how plans are built                   | `js/data/planner.js` (`SLOTS`, `DAYS`, `SPLITS`, `GOALS`, `SIZE`) |
@@ -108,5 +111,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
 - IndexedDB writes are async; `store.flushSync()` mirrors state to
   localStorage on `pagehide` so a closed app doesn't lose the last set.
   `load()` takes whichever copy has the newer `savedAt`.
+- **Demo order:** video → photos (`LIME.ART`, if Settings → Exercise demos is
+  Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
+- Exercise photos are AI-generated prototypes supplied by the owner; three had a
+  sportswear logo retouched out. Re-check new batches for logos before adding.
 - SMIL animations in figures: fine in Safari/Chrome; turned off for
   `prefers-reduced-motion`.

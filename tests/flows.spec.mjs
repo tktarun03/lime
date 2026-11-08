@@ -205,6 +205,7 @@ test('3D body demo replaces the drawing when WebGL is available', async ({ page 
   const errs = errorsOf(page);
   await page.addInitScript(() => { try { localStorage.setItem('lime.force3d', '1'); } catch (e) { /* ignore */ } });
   await onboard(page);
+  await page.evaluate(() => LIME.store.update((x) => { x.settings.demo = '3d'; }));
   await page.goto('/#/library/goblet-squat');
   await expect(page.locator('.sheet .b3d')).toBeVisible();
   const ok = await page.evaluate(() => LIME.body3d.supported);
@@ -239,4 +240,43 @@ test('old text size values migrate', async ({ page }) => {
   await page.goto('/');
   const out = await page.evaluate(() => [LIME.store.migrate({ settings: { text: 'large' } }).settings.text, LIME.store.migrate({ settings: { text: 'normal' } }).settings.text, LIME.store.migrate({}).settings.text]);
   expect(out).toEqual(['l', 'm', 'm']);
+});
+
+test('exercise photos load everywhere, and the demo setting switches style with undo', async ({ page }) => {
+  const failed = [];
+  page.on('requestfailed', (r) => failed.push(r.url()));
+  page.on('response', (r) => { if (r.status() >= 400) failed.push(r.status() + ' ' + r.url()); });
+  await onboard(page, { equipment: ['dumbbell'] });
+  // home hero
+  await expect(page.locator('.hero .photo img.ph-a')).toBeVisible();
+  // library thumbnails and detail
+  await page.goto('/#/library/goblet-squat');
+  await expect(page.locator('.sheet .photo .ph-b')).toHaveAttribute('src', 'media/ex/goblet-squat-b.webp');
+  const loaded = await page.locator('.sheet .photo img').evaluateAll((imgs) => Promise.all(imgs.map((i) => i.decode().then(() => i.naturalWidth > 0))));
+  expect(loaded).toEqual([true, true]);
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(300);
+  expect(failed, failed.join('\n')).toEqual([]);
+  // switch to simple drawings
+  await page.goto('/#/settings');
+  await page.click('[data-demo-style="flat"]');
+  expect(await page.evaluate(() => LIME.store.state.settings.demo)).toBe('flat');
+  await page.click('.toast .t-btn');
+  expect(await page.evaluate(() => LIME.store.state.settings.demo)).toBe('photo');
+  await page.click('[data-demo-style="flat"]');
+  await page.goto('/#/library/goblet-squat');
+  await expect(page.locator('.sheet .photo')).toHaveCount(0);
+  await expect(page.locator('.sheet .stage svg')).toBeVisible();
+});
+
+test('old 3D switch migrates to the demo style', async ({ page }) => {
+  await page.goto('/');
+  const out = await page.evaluate(() => [
+    LIME.store.migrate({ settings: { body3d: false } }).settings.demo,
+    LIME.store.migrate({ settings: { body3d: true } }).settings.demo,
+    LIME.store.migrate({}).settings.demo,
+    LIME.store.migrate({ settings: { demo: '3d' } }).settings.demo
+  ]);
+  expect(out).toEqual(['flat', 'photo', 'photo', '3d']);
 });

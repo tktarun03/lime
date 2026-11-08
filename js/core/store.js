@@ -25,7 +25,8 @@
         voice: false,
         countdown: true,
         keepAwake: true,
-        body3d: true,
+        body3d: true,         // kept for old backups; superseded by demo
+        demo: 'photo',        // photo | 3d | flat
         accent: 'lime',
         text: 'm',            // system | s | m | l | xl
         restDefault: 60
@@ -48,6 +49,9 @@
     const out = Object.assign({}, d, s);
     out.settings = Object.assign({}, d.settings, s.settings || {});
     out.ui = Object.assign({}, d.ui, s.ui || {});
+    // v0.4: demo style replaces the 3D on/off switch
+    if (!(s.settings && s.settings.demo)) out.settings.demo = out.settings.body3d === false ? 'flat' : 'photo';
+    if (!['photo', '3d', 'flat'].includes(out.settings.demo)) out.settings.demo = 'photo';
     // v0.3: text sizes renamed (normal/large/xlarge → m/l/xl), new system option
     out.settings.text = ({ normal: 'm', large: 'l', xlarge: 'xl' })[out.settings.text] || out.settings.text;
     if (!['system', 's', 'm', 'l', 'xl'].includes(out.settings.text)) out.settings.text = 'm';

@@ -64,7 +64,10 @@
       <div class="set-group">
         <div class="set-row"><span class="ico">${LIME.icon('sparkle')}</span><span class="grow">Accent colour</span>
           <span class="swatches">${ACCENTS.map((a) => `<button type="button" class="swatch${s.settings.accent === a.id ? ' on' : ''}" style="background:${a.color}" data-accent="${a.id}" aria-label="${a.label}"></button>`).join('')}</span></div>
-        ${row({ icon: 'body', label: '3D body demos', sub: LIME.body3d.supported ? 'Turn off to save battery' : 'Not supported on this device', toggle: 'body3d' })}
+        <div class="set-row col">
+          <div class="row"><span class="ico">${LIME.icon('body')}</span><span class="grow">Exercise demos<small>${({ photo: 'Real photos, start and end position', '3d': '3D body with worked muscles lit' + (LIME.body3d.supported ? '' : ' (not supported here — drawings shown)'), flat: 'Simple drawings — lightest on battery' })[LIME.demoStyle()]}</small></span></div>
+          <div class="seg" role="radiogroup" aria-label="Exercise demos">${[['photo', 'Photos'], ['3d', '3D'], ['flat', 'Simple']].map(([id, label]) => `<button type="button" data-demo-style="${id}" class="${LIME.demoStyle() === id ? 'on' : ''}" role="radio" aria-checked="${LIME.demoStyle() === id}">${label}</button>`).join('')}</div>
+        </div>
         <div class="set-row col">
           <div class="row"><span class="ico">${LIME.icon('search')}</span><span class="grow">Text size<small>${s.settings.text === 'system' ? 'Following your phone\'s text size' : 'Auto follows your phone\'s text size'}</small></span></div>
           <div class="seg" role="radiogroup" aria-label="Text size">${TEXT_SIZES.map((t) => `<button type="button" data-text="${t.id}" class="${s.settings.text === t.id ? 'on' : ''}" role="radio" aria-checked="${s.settings.text === t.id}" aria-label="${t.name}">${t.label}</button>`).join('')}</div>
@@ -98,6 +101,18 @@
     U.$$('[data-accent]', view).forEach((b) => b.onclick = () => {
       LIME.store.update((x) => { x.settings.accent = b.getAttribute('data-accent'); });
       LIME.app.applyLook(); render(view);
+    });
+    U.$$('[data-demo-style]', view).forEach((b) => b.onclick = () => {
+      const prev = LIME.demoStyle();
+      const next = b.getAttribute('data-demo-style');
+      if (prev === next) return;
+      LIME.store.update((x) => { x.settings.demo = next; });
+      render(view);
+      LIME.toast(`Demos: ${({ photo: 'photos', '3d': '3D bodies', flat: 'simple drawings' })[next]}`, { undo: () => {
+        if (LIME.demoStyle() !== next) return;
+        LIME.store.update((x) => { x.settings.demo = prev; });
+        if (location.hash.startsWith('#/settings')) render(view);
+      } });
     });
     U.$$('[data-text]', view).forEach((b) => b.onclick = () => {
       LIME.store.update((x) => { x.settings.text = b.getAttribute('data-text'); });

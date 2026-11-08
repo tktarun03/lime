@@ -1,6 +1,6 @@
 {
   "name": "lime-workout",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "LIME — minimalist local-only workout PWA",
   "scripts": {

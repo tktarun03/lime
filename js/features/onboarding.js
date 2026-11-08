@@ -30,9 +30,9 @@
   // ---------- Intro tour ----------
   function renderIntro(view) {
     const slides = [
-      { script: 'Your', h: 'Stronger <span class="hl">self</span>', p: 'starts with the next rep. Short, focused workouts built around you.', fig: LIME.figureSlot('squat', 'dumbbell', ['Quads', 'Glutes']) },
-      { script: 'Every', h: 'Rep <span class="hl">counts</span>', p: 'Sets, rest timers, a 3-2-1 countdown and personal records — tracked as you go.', fig: LIME.figureSlot('bench', 'barbell', ['Chest', 'Triceps']) },
-      { script: 'Your', h: 'Data. <span class="hl">Your</span> phone.', p: 'No account, no server. Everything stays on this device, with a backup file you control.', fig: LIME.figureSlot('press', 'dumbbell', ['Shoulders', 'Triceps']) }
+      { script: 'Your', h: 'Stronger <span class="hl">self</span>', p: 'starts with the next rep. Short, focused workouts built around you.', fig: LIME.media(LIME.ex('goblet-squat'), { three: true }) },
+      { script: 'Every', h: 'Rep <span class="hl">counts</span>', p: 'Sets, rest timers, a 3-2-1 countdown and personal records — tracked as you go.', fig: LIME.media(LIME.ex('bench-press'), { three: true }) },
+      { script: 'Your', h: 'Data. <span class="hl">Your</span> phone.', p: 'No account, no server. Everything stays on this device, with a backup file you control.', fig: LIME.media(LIME.ex('db-press'), { three: true }) }
     ];
     view.innerHTML = `<div class="intro">
       <button type="button" class="link-btn skip" data-skip>Skip</button>

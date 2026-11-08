@@ -498,7 +498,7 @@
   /** Upgrade every .b3d slot under root to a live 3D figure. */
   function hydrate(root) {
     const slots = Array.from((root || document).querySelectorAll('.b3d:not([data-b3d-on])'));
-    if (!slots.length || !webgl() || (LIME.store && LIME.store.state.settings.body3d === false)) return;
+    if (!slots.length || !webgl() || (LIME.demoStyle && LIME.demoStyle() === 'flat')) return;
     // Automated test browsers render WebGL in software (very slow); they keep
     // the flat drawings unless a test opts in with localStorage 'lime.force3d'.
     if (navigator.webdriver) { let f = null; try { f = localStorage.getItem('lime.force3d'); } catch (e) { /* ignore */ } if (f !== '1') return; }

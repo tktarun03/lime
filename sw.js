@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 
@@ -22,6 +22,7 @@ const ASSETS = [
   'js/core/timer.js' + V,
   'js/core/audio.js' + V,
   'js/data/exercises.js' + V,
+  'js/data/art.js' + V,
   'js/data/figures.js' + V,
   'js/data/planner.js' + V,
   'js/ui/icons.js' + V,

@@ -4,6 +4,12 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.4.0 — 2026-11-08
+
+- Every exercise now shows real photos of the start and end position.
+- Choose Photos, 3D or Simple drawings in Settings → Look → Exercise demos.
+- Library thumbnails use the photos too.
+
 ## 0.3.0 — 2026-11-07
 
 - More lifelike 3D bodies: shaped muscles, real lighting and reflections.

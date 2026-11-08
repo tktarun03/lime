@@ -83,6 +83,17 @@ L.EXERCISES.forEach((e) => {
 ok(true, `${L.EXERCISES.length} exercises checked`);
 L.EXERCISES.forEach((e) => ['easier', 'harder'].forEach((k) => { if (e[k]) ok(!!L.ex(e[k]), `${e.id}.${k} → ${e[k]} exists`); }));
 
+console.log('Exercise photos');
+vm.runInContext(read('js/data/art.js'), ctx, { filename: 'js/data/art.js' });
+const artIds = Object.keys(L.ART || {});
+ok(artIds.length > 0, `${artIds.length} exercises have photos`);
+artIds.forEach((id) => {
+  ok(!!L.ex(id), `photo id ${id} is a real exercise`);
+  ['a', 'b', 't'].forEach((s) => { const f = `media/ex/${id}-${s}.webp`; if (!existsSync(join(ROOT, f))) ok(false, `missing ${f}`); });
+});
+const big = readdirSync(join(ROOT, 'media/ex')).filter((f) => statSync(join(ROOT, 'media/ex', f)).size > 150 * 1024);
+ok(!big.length, `every photo under 150 KB${big.length ? ' (too big: ' + big.join(', ') + ')' : ''}`);
+
 console.log('Planner');
 let planErr = 0;
 for (const goal of Object.keys(L.planner.GOALS)) for (const level of ['beginner', 'intermediate', 'advanced'])

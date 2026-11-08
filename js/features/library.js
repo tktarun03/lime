@@ -77,7 +77,7 @@
     };
     LIME.sheet.open({
       title: e.name,
-      body: `<div class="stage">${LIME.media(e, { three: true })}${e.video ? '' : '<span class="badge tag">3D demo · worked muscles lit</span>'}</div>
+      body: `<div class="stage">${LIME.media(e, { three: true })}${e.video || (LIME.ART[e.id] && LIME.demoStyle() === 'photo') ? '' : `<span class="badge tag">${LIME.demoStyle() === '3d' ? '3D demo · worked muscles lit' : 'Drawing'}</span>`}</div>
         <div style="margin:12px 0 4px">${e.muscles.map((m) => `<span class="tag">${U.esc(m)}</span>`).join('')}<span class="tag lvl-${e.level}">${LVL[e.level]}</span></div>
         ${prTxt ? `<p style="margin:8px 0"><span class="pr-pill">${LIME.icon('trophy').replace('<svg', '<svg width="14" height="14"')} Best: ${U.esc(prTxt)}</span></p>` : ''}
         <div class="cue">${U.esc(e.cue)}</div>

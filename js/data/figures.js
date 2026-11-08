@@ -191,19 +191,44 @@
     </svg>`;
   }
 
+  /** Which demo style to show: 'photo' (default), '3d' or 'flat' (Settings). */
+  function demoStyle() {
+    const s = LIME.store && LIME.store.state.settings;
+    return (s && s.demo) || 'photo';
+  }
+
   /**
-   * Video if the exercise has one, otherwise the moving figure.
-   * opts.three: wrap in a slot that LIME.body3d.hydrate() upgrades to the 3D
-   * body (worked muscles lit). The SVG stays as the fallback and first frame.
+   * Start and end photos (js/data/art.js) blended in a loop. Thumbnails
+   * (opts.still) use the small -t image.
+   */
+  function photo(ex, opts) {
+    const E = LIME.U.esc, base = 'media/ex/' + ex.id;
+    if (opts.still) return `<img class="ph-thumb" src="${base}-t.webp" alt="" loading="lazy" decoding="async">`;
+    const pat = (LIME.POSES && LIME.POSES.patterns[ex.fig]) || {};
+    const dur = Math.min(3.6, Math.max(2.4, (pat.dur || 2.4) * 1.3)).toFixed(1); // one hold in each pose
+    const wh = LIME.ART[ex.id];
+    return `<div class="photo" style="--dur:${dur}s;--ar:${wh[0]}/${wh[1]}" role="img" aria-label="${E(ex.name)}: start and end position">
+      <img class="ph-a" src="${base}-a.webp" alt="" decoding="async" draggable="false">
+      <img class="ph-b" src="${base}-b.webp" alt="" decoding="async" draggable="false">
+    </div>`;
+  }
+
+  /**
+   * The exercise demo: video if the exercise has one, else photos (if any
+   * and the setting allows), else the moving figure.
+   * opts.three: wrap the figure in a slot that LIME.body3d.hydrate() upgrades
+   * to the 3D body. The SVG stays as the fallback and first frame.
    */
   function media(ex, opts) {
     opts = opts || {};
     if (ex.video) {
       return `<video src="${LIME.U.esc(ex.video)}" autoplay loop muted playsinline preload="metadata" aria-label="${LIME.U.esc(ex.name)} demo"></video>`;
     }
+    const style = demoStyle();
+    if (LIME.ART && LIME.ART[ex.id] && style === 'photo') return photo(ex, opts);
     const eq = ex.figEq || ex.equipment;
     const svg = figure(ex.fig, { eq, label: ex.name + ' demo', still: opts.still });
-    if (!opts.three) return svg;
+    if (!opts.three || style === 'flat') return svg;
     return slot(ex.fig, eq, ex.muscles, svg, opts.ring);
   }
 
@@ -215,6 +240,7 @@
 
   LIME.figure = figure;
   LIME.media = media;
+  LIME.demoStyle = demoStyle;
   LIME.figureSlot = slot;
   LIME.FIGURES = Object.keys(P);
   LIME.POSES = { patterns: P, stand: STAND, front: ['jack', 'pullup'] };
