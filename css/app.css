@@ -566,3 +566,16 @@ body:has(.sheet) .toast.out { animation-name: toast-out-top; }
 .sugg.up { border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: var(--accent-soft); }
 .sugg.up strong { color: var(--accent); }
 .sugg.down strong { color: #FFB86B; }
+
+/* ---------- Branding / About (js/data/brand.js, js/features/about.js) ---------- */
+.splash-by { font-size: max(11px, .72rem); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.credit { display: block; text-align: center; margin: 22px 0 4px; font-size: max(11px, .78rem); color: var(--muted); text-decoration: none; letter-spacing: .02em; }
+.credit strong { color: var(--ink-2); font-weight: var(--w-med); }
+.credit:hover strong, .credit:active strong { color: var(--accent); }
+.about-hero { display: flex; align-items: center; gap: 16px; }
+.about-logo { width: 72px; height: 72px; border-radius: 22%; flex: none; box-shadow: 0 0 0 1px var(--glass-hi), 0 14px 36px -14px var(--accent-glow); }
+.about-name { font-size: 2.2rem; }
+.about-text p { margin: 0 0 10px; color: var(--ink-2); font-size: .95rem; line-height: 1.6; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-avatar { width: 56px; height: 56px; border-radius: 50%; flex: none; display: grid; place-items: center; font-family: var(--font-disp); font-weight: var(--w-disp); font-size: 1.35rem; letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.about-creator { font-size: 1.05rem; }

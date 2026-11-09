@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.8.0 — 2026-11-09
+
+- New About page: the story behind LIME and its creator, Arunkumar
+  Thamilarasu. Settings → About LIME.
+
 ## 0.7.1 — 2026-11-09
 
 - Pinch and double-tap zoom are off, so the app feels like a native app. Use

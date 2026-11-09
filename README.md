@@ -11,3 +11,5 @@ phone** — no account, no server.
 
 Run locally: `python3 -m http.server 8765` then open http://localhost:8765.
 Developers: start with [AGENTS.md](AGENTS.md).
+
+Created out of passion by **Arunkumar Thamilarasu**.

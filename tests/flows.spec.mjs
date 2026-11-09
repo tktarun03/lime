@@ -484,3 +484,22 @@ test('menu bar stays fixed at the bottom on every main screen while scrolling', 
   await page.click('[data-start]');
   await expect(page.locator('#tabbar')).toBeHidden();
 });
+
+test('branding: About page, credits on Home and Settings, empty links hidden', async ({ page }) => {
+  const errs = errorsOf(page);
+  await onboard(page);
+  await expect(page.locator('.credit')).toContainText('Arunkumar Thamilarasu');
+  await page.goto('/#/settings');
+  await expect(page.locator('.credit')).toContainText('Created out of passion');
+  await page.click('a[href="#/about"].set-row');
+  await expect(page).toHaveURL(/#\/about/);
+  await expect(page.locator('.about-creator')).toHaveText('Arunkumar Thamilarasu');
+  await expect(page.locator('#tabbar')).toBeVisible();
+  const linkedin = await page.evaluate(() => LIME.BRAND.links.linkedin);
+  await expect(page.locator('a[href*="linkedin.com"]')).toHaveCount(linkedin ? 1 : 0);
+  const gh = page.locator('a[href*="github.com"]');
+  await expect(gh).toHaveAttribute('target', '_blank');
+  await expect(gh).toHaveAttribute('rel', /noopener/);
+  await noHorizontalScroll(page);
+  expect(errs).toEqual([]);
+});

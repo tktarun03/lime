@@ -117,6 +117,7 @@
           <span class="ico chev muted">${LIME.icon('chev')}</span></a>`).join('')}</div>
 
       <div class="card tex" style="margin-top:12px"><div class="eyebrow">Today's line</div><p class="quote slant" style="margin:8px 0 0">${U.esc(line)}</p></div>
+      <a class="credit" href="#/about">${U.esc(LIME.BRAND.tagline)} by <strong>${U.esc(LIME.BRAND.creator)}</strong></a>
     `;
 
     U.$('[data-refresh]', view).onclick = (e) => LIME.app.refresh(e.currentTarget);

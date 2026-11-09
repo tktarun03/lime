@@ -15,6 +15,7 @@
     settings: { render: (v, p) => LIME.settings.render(v, p), tabs: true, tab: 'settings' },
     onboarding: { render: (v) => LIME.onboarding.render(v), tabs: false },
     plan: { render: (v, p) => LIME.planEditor.render(v, p), tabs: true, tab: 'home' },
+    about: { render: (v) => LIME.about.render(v), tabs: true, tab: 'settings' },
     workout: { render: (v) => LIME.player.render(v), tabs: false },
     start: { render: () => { const d = LIME.home.nextDay(); if (d) LIME.player.start(d.id); }, tabs: false }
   };

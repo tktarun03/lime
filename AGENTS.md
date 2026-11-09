@@ -59,6 +59,7 @@ tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 | Add a screen                                 | new file in `js/features/`, route in `js/app.js` `ROUTES`, script tag in `index.html`, asset in `sw.js` |
 | Show a notice                                | `LIME.toast(title, { body, kind, undo, action })` |
 | Colours / fonts / spacing                    | tokens at the top of `css/app.css` |
+| Creator name, About text, LinkedIn/GitHub    | `js/data/brand.js` (empty links are hidden) |
 
 ## Golden rules
 

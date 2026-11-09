@@ -91,10 +91,12 @@
       <div class="section-title"><h2>About</h2></div>
       <div class="set-group">
         ${row({ icon: 'refresh', label: 'Refresh app', sub: 'Reload and check for updates. Your data stays.', val: 'v' + LIME.VERSION, attr: 'data-refresh' })}
+        ${row({ icon: 'heart', label: 'About LIME', sub: 'The story and the creator', href: '#/about' })}
         ${row({ icon: 'sparkle', label: 'Version history', href: '#/settings/versions' })}
         ${row({ icon: 'check', label: 'Self-check', sub: 'Test storage, timers and data on this phone', href: '#/settings/check' })}
       </div>
-      <p class="tiny muted" style="text-align:center;margin-top:20px">LIME v${LIME.VERSION} · data stored on this device only (${U.esc(LIME.store.backend)})</p>
+      <a class="credit" href="#/about">${U.esc(LIME.BRAND.tagline)} by <strong>${U.esc(LIME.BRAND.creator)}</strong></a>
+      <p class="tiny muted" style="text-align:center;margin-top:6px">LIME v${LIME.VERSION} · data stored on this device only (${U.esc(LIME.store.backend)})</p>
     `;
 
     U.$$('[data-set]', view).forEach((t) => t.onchange = () => {
