@@ -270,15 +270,18 @@ test('exercise photos load everywhere, and the demo setting switches style with 
   await expect(page.locator('.sheet .stage svg')).toBeVisible();
 });
 
-test('old 3D switch migrates to the demo style', async ({ page }) => {
+test('old 3D switch migrates to photos, a chosen demo style is kept', async ({ page }) => {
   await page.goto('/');
   const out = await page.evaluate(() => [
     LIME.store.migrate({ settings: { body3d: false } }).settings.demo,
     LIME.store.migrate({ settings: { body3d: true } }).settings.demo,
     LIME.store.migrate({}).settings.demo,
-    LIME.store.migrate({ settings: { demo: '3d' } }).settings.demo
+    LIME.store.migrate({ settings: { demo: '3d' } }).settings.demo,
+    LIME.store.migrate({ settings: { demo: 'flat', body3d: false } }).settings.demo,
+    LIME.store.migrate({ settings: { demo: 'flat', body3d: false, demoChosen: true } }).settings.demo,
+    LIME.store.migrate({ settings: { demo: 'flat', demoChosen: true } }).settings.demo
   ]);
-  expect(out).toEqual(['flat', 'photo', 'photo', '3d']);
+  expect(out).toEqual(['photo', 'photo', 'photo', '3d', 'photo', 'flat', 'flat']);
 });
 
 test('refresh button reloads, keeps data and says it is up to date', async ({ page }) => {

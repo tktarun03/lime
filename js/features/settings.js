@@ -108,7 +108,7 @@
       const prev = LIME.demoStyle();
       const next = b.getAttribute('data-demo-style');
       if (prev === next) return;
-      LIME.store.update((x) => { x.settings.demo = next; });
+      LIME.store.update((x) => { x.settings.demo = next; x.settings.demoChosen = true; });
       render(view);
       LIME.toast(`Demos: ${({ photo: 'photos', '3d': '3D bodies', flat: 'simple drawings' })[next]}`, { undo: () => {
         if (LIME.demoStyle() !== next) return;

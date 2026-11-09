@@ -117,7 +117,9 @@
     const badFig = LIME.EXERCISES.filter((e) => !LIME.FIGURES.includes(e.fig)).map((e) => e.id);
     out.push({ name: 'Exercise library', ok: !badFig.length, detail: badFig.length ? 'Missing art: ' + badFig.join(', ') : `${LIME.EXERCISES.length} moves` });
     const missingArt = LIME.EXERCISES.filter((e) => !LIME.ART[e.id]).map((e) => e.id);
-    out.push({ name: 'Exercise photos', ok: !missingArt.length, warn: !!missingArt.length, detail: missingArt.length ? 'Drawings for: ' + missingArt.join(', ') : `${Object.keys(LIME.ART).length} of ${LIME.EXERCISES.length} moves` });
+    const style = LIME.demoStyle();
+    out.push({ name: 'Exercise photos', ok: !missingArt.length && style === 'photo', warn: !!missingArt.length || style !== 'photo',
+      detail: style !== 'photo' ? `Hidden: Exercise demos is set to ${style === '3d' ? '3D' : 'Simple'} (Settings → Look)` : missingArt.length ? 'Drawings for: ' + missingArt.join(', ') : `${Object.keys(LIME.ART).length} of ${LIME.EXERCISES.length} moves` });
     out.push({ name: '3D bodies', ok: LIME.body3d.supported, warn: !LIME.body3d.supported, detail: LIME.body3d.supported ? 'WebGL available' : 'No WebGL — showing flat drawings' });
     out.push({ name: 'Keep screen on', ok: LIME.wake.supported, warn: !LIME.wake.supported, detail: LIME.wake.supported ? 'Supported' : 'Not supported in this browser' });
     out.push({ name: 'Offline', ok: 'serviceWorker' in navigator && !!navigator.serviceWorker.controller, warn: true, detail: navigator.serviceWorker && navigator.serviceWorker.controller ? 'Ready' : 'Becomes ready after the next open' });

@@ -27,6 +27,7 @@
         keepAwake: true,
         body3d: true,         // kept for old backups; superseded by demo
         demo: 'photo',        // photo | 3d | flat
+        demoChosen: false,    // true once the user picks a style in Settings
         suggest: true,        // weight suggestions in the player
         accent: 'lime',
         text: 'm',            // system | s | m | l | xl
@@ -53,7 +54,10 @@
     // v0.5: plans can be edited; edited plans are not rebuilt by profile changes
     if (out.plan && typeof out.plan.edited !== 'boolean') out.plan.edited = false;
     // v0.4: demo style replaces the 3D on/off switch
-    if (!(s.settings && s.settings.demo)) out.settings.demo = out.settings.body3d === false ? 'flat' : 'photo';
+    // (the old 3D on/off switch predates photos, so it never meant "hide photos")
+    if (!(s.settings && s.settings.demo)) out.settings.demo = 'photo';
+    // v0.5.1: undo v0.4's wrong move of old "3D off" users to Simple, unless they picked it themselves
+    if (out.settings.demo === 'flat' && out.settings.body3d === false && !out.settings.demoChosen) out.settings.demo = 'photo';
     if (!['photo', '3d', 'flat'].includes(out.settings.demo)) out.settings.demo = 'photo';
     // v0.3: text sizes renamed (normal/large/xlarge → m/l/xl), new system option
     out.settings.text = ({ normal: 'm', large: 'l', xlarge: 'xl' })[out.settings.text] || out.settings.text;

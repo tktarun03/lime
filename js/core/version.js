@@ -2,8 +2,16 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.5.0',
+  VERSION: '0.5.1',
   RELEASES: [
+    {
+      version: '0.5.1',
+      date: '2026-11-09',
+      notes: [
+        'Fixed: if you had turned off 3D demos in an older version, exercise photos were hidden. Photos now show by default.',
+        'Self-check now says when photos are hidden by the Exercise demos setting.'
+      ]
+    },
     {
       version: '0.5.0',
       date: '2026-11-08',
