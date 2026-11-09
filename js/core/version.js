@@ -2,8 +2,16 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.6.0',
+  VERSION: '0.7.0',
   RELEASES: [
+    {
+      version: '0.7.0',
+      date: '2026-11-09',
+      notes: [
+        'Man photos for all 35 exercises. Choose Woman or Man in Settings → Look.',
+        'New LIME logo on the Home Screen icon, browser tab and start screen.'
+      ]
+    },
     {
       version: '0.6.0',
       date: '2026-11-09',

@@ -28,7 +28,7 @@ sw.js                   service worker (page network-first, versioned assets cac
 css/app.css             all styles; tokens at the top
 fonts/                  self-hosted variable Oswald + Inter (OFL) — no Google Fonts requests
 vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
-icons/                  app icons (svg + png); favicon.ico at root
+icons/                  app icons from the owner's logo: logo-1024.png (source, full square), icon-512/192, apple-touch-icon (180), favicon-64; favicon.ico at root
 media/ex/               exercise photos, woman: <id>-a.webp (start), -b.webp (end), -t.webp (thumb)
 media/ex/m/             exercise photos, man (same names); missing ones fall back to the woman's
 media/                  optional exercise video clips (see media/README.md)
@@ -120,8 +120,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
   Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
 - Exercise photos are AI-generated prototypes supplied by the owner; four had a
   sportswear logo retouched out. Re-check new batches for logos before adding.
-  Woman: all 35. Man (`settings.athlete = 'm'`): 7 so far — back-squat,
-  superman, russian-twist, climber, high-knees, ham-stretch, hip-flexor.
+  Woman: all 35. Man (`settings.athlete = 'm'`): all 35. The man's end photos
+  for planted moves (squats, deadlift, kb-swing, calf-raise, ohp, band-press)
+  were shifted so the toes line up with the start photo.
   All 35 woman photos show the same athlete. Open photo issues: high-knees and climber
   start/end are nearly identical (same knee up), so their loop barely moves —
   need an end photo with the other knee. russian-twist-b was supplied mirrored

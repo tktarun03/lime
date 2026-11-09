@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.7.0 — 2026-11-09
+
+- Man photos for all 35 exercises. Choose Woman or Man in Settings → Look.
+- New LIME logo on the Home Screen icon, browser tab and start screen.
+
 ## 0.6.0 — 2026-11-09
 
 - Choose whether exercise photos show a woman or a man, at sign-up or in

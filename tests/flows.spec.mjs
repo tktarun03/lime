@@ -421,10 +421,11 @@ test('photo athlete: chosen at sign-up and in Settings, man falls back to woman'
   await page.click('[data-continue]');
   expect(await page.evaluate(() => LIME.store.state.settings.athlete)).toBe('m');
   const hasMan = await page.evaluate(() => Object.keys(LIME.ART_M)[0]);
-  const noMan = await page.evaluate(() => LIME.EXERCISES.find((e) => !LIME.ART_M[e.id]).id);
+  // every move has a man photo now; remove one in the page to prove the fallback still works
+  const noMan = await page.evaluate(() => { const id = LIME.EXERCISES.find((e) => e.id !== Object.keys(LIME.ART_M)[0]).id; delete LIME.ART_M[id]; return id; });
   await page.goto('/#/library/' + hasMan);
   await expect(page.locator('.sheet .photo .ph-a')).toHaveAttribute('src', `media/ex/m/${hasMan}-a.webp`);
-  await page.goto('/#/library/' + noMan);
+  await page.evaluate((id) => { location.hash = '#/library/' + id; }, noMan);
   await expect(page.locator('.sheet .photo .ph-a')).toHaveAttribute('src', `media/ex/${noMan}-a.webp`);
   // switch back in Settings, with undo
   await page.goto('/#/settings');

@@ -43,14 +43,42 @@
     'squat': [482, 760],
     'superman': [760, 181]
   };
-  // man: media/ex/m/ (7 exercises)
+  // man: media/ex/m/ (35 exercises)
   LIME.ART_M = {
     'back-squat': [432, 760],
+    'band-press': [398, 760],
+    'band-row': [760, 531],
+    'bb-row': [455, 694],
+    'bench-press': [760, 679],
+    'box-squat': [649, 760],
+    'calf-raise': [215, 760],
     'climber': [760, 432],
+    'crunch': [760, 344],
+    'db-bench': [760, 733],
+    'db-curl': [250, 760],
+    'db-lunge': [716, 760],
+    'db-press': [411, 760],
+    'db-row': [735, 760],
+    'deadlift': [344, 760],
+    'glute-bridge': [760, 332],
+    'goblet-squat': [331, 760],
     'ham-stretch': [481, 760],
     'high-knees': [374, 760],
     'hip-flexor': [760, 654],
+    'jacks': [489, 760],
+    'jump-squat': [486, 760],
+    'kb-swing': [427, 760],
+    'knee-pushup': [760, 475],
+    'lunge': [504, 760],
+    'neg-pullup': [451, 760],
+    'ohp': [237, 760],
+    'pike-pushup': [760, 550],
+    'plank': [760, 317],
+    'pullup': [451, 760],
+    'pushup': [760, 425],
+    'rdl': [414, 760],
     'russian-twist': [760, 563],
+    'squat': [470, 760],
     'superman': [760, 235]
   };
 })();

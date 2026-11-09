@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.6.0';
+const VERSION = '0.7.0';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 
@@ -12,7 +12,7 @@ const ASSETS = [
   'fonts/oswald-var.woff2',
   'fonts/inter-var.woff2',
   'vendor/three.min.js',
-  'icons/icon.svg' + V,
+  'icons/favicon-64.png' + V,
   'icons/apple-touch-icon.png' + V,
   'icons/icon-192.png',
   'icons/icon-512.png',

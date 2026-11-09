@@ -21,7 +21,9 @@ from PIL import Image
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-THUMB_POSE = {'jump-squat': 'a', 'deadlift': 'a', 'neg-pullup': 'a'}
+# which photo makes the clearest thumbnail (default 'b'); the athletes' sets differ for tempo squat
+THUMB_POSE = {'w': {'jump-squat': 'a', 'deadlift': 'a', 'neg-pullup': 'a'},
+              'm': {'deadlift': 'a', 'neg-pullup': 'a'}}
 ATHLETES = {'w': ('media/ex', 'ART'), 'm': ('media/ex/m', 'ART_M')}
 
 
@@ -64,7 +66,7 @@ def build(src, athlete):
         ca, cb = ca.resize(size, Image.LANCZOS), cb.resize(size, Image.LANCZOS)
         ca.save(f'{dst}/{i}-a.webp', 'WEBP', quality=80, method=6, alpha_quality=90)
         cb.save(f'{dst}/{i}-b.webp', 'WEBP', quality=80, method=6, alpha_quality=90)
-        t = (ca if THUMB_POSE.get(i) == 'a' else cb).copy()
+        t = (ca if THUMB_POSE[athlete].get(i) == 'a' else cb).copy()
         t = t.crop(t.getchannel('A').getbbox())
         t.thumbnail((152, 152), Image.LANCZOS)
         sq = Image.new('RGBA', (160, 160), (0, 0, 0, 0))
