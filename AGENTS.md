@@ -29,7 +29,8 @@ css/app.css             all styles; tokens at the top
 fonts/                  self-hosted variable Oswald + Inter (OFL) — no Google Fonts requests
 vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
 icons/                  app icons (svg + png); favicon.ico at root
-media/ex/               exercise photos: <id>-a.webp (start), -b.webp (end), -t.webp (thumb)
+media/ex/               exercise photos, woman: <id>-a.webp (start), -b.webp (end), -t.webp (thumb)
+media/ex/m/             exercise photos, man (same names); missing ones fall back to the woman's
 media/                  optional exercise video clips (see media/README.md)
 tools/build-art.py      turns 1200×1200 transparent PNGs into media/ex/*.webp + js/data/art.js
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio
@@ -46,7 +47,7 @@ tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 | I want to…                                   | Go to |
 |----------------------------------------------|-------|
 | Add or edit an exercise                      | `js/data/exercises.js` (fields documented at the top) |
-| Add or replace exercise photos               | put `<id>-a.png` / `<id>-b.png` (1200×1200, transparent) in a folder, run `python3 tools/build-art.py <folder> media/ex js/data/art.js` |
+| Add or replace exercise photos               | put `<id>-a.png` / `<id>-b.png` (1200×1200, transparent) in a folder, run `python3 tools/build-art.py <folder>` (woman) or `… <folder> --athlete m` (man). It cleans, crops, compresses and rewrites `js/data/art.js`. |
 | Add a video clip for an exercise             | put MP4 in `media/`, set `video: 'media/<id>.mp4'` |
 | Draw a new movement illustration             | `js/data/figures.js` → add a pattern with poses `a` and `b` |
 | Change how plans are built                   | `js/data/planner.js` (`SLOTS`, `DAYS`, `SPLITS`, `GOALS`, `SIZE`) |
@@ -119,7 +120,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
   Photos) → 3D body (if 3D) → SVG drawing. `LIME.media(ex, opts)` decides.
 - Exercise photos are AI-generated prototypes supplied by the owner; four had a
   sportswear logo retouched out. Re-check new batches for logos before adding.
-  All 35 now show the same athlete. Open photo issues: high-knees and climber
+  Woman: all 35. Man (`settings.athlete = 'm'`): 7 so far — back-squat,
+  superman, russian-twist, climber, high-knees, ham-stretch, hip-flexor.
+  All 35 woman photos show the same athlete. Open photo issues: high-knees and climber
   start/end are nearly identical (same knee up), so their loop barely moves —
   need an end photo with the other knee. russian-twist-b was supplied mirrored
   and is flipped back during import.

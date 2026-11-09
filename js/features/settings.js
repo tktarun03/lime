@@ -68,6 +68,9 @@
         <div class="set-row col">
           <div class="row"><span class="ico">${LIME.icon('body')}</span><span class="grow">Exercise demos<small>${({ photo: 'Real photos, start and end position', '3d': '3D body with worked muscles lit' + (LIME.body3d.supported ? '' : ' (not supported here — drawings shown)'), flat: 'Simple drawings — lightest on battery' })[LIME.demoStyle()]}</small></span></div>
           <div class="seg" role="radiogroup" aria-label="Exercise demos">${[['photo', 'Photos'], ['3d', '3D'], ['flat', 'Simple']].map(([id, label]) => `<button type="button" data-demo-style="${id}" class="${LIME.demoStyle() === id ? 'on' : ''}" role="radio" aria-checked="${LIME.demoStyle() === id}">${label}</button>`).join('')}</div>
+          ${LIME.demoStyle() === 'photo' ? `<div class="row" style="gap:12px"><span class="small muted grow">Photos show</span>
+            <div class="seg" style="flex:0 0 190px" role="radiogroup" aria-label="Photos show">${[['w', 'Woman'], ['m', 'Man']].map(([id, label]) => `<button type="button" data-athlete="${id}" class="${s.settings.athlete === id ? 'on' : ''}" role="radio" aria-checked="${s.settings.athlete === id}">${label}</button>`).join('')}</div></div>
+            ${s.settings.athlete === 'm' && Object.keys(LIME.ART_M || {}).length < LIME.EXERCISES.length ? `<small class="tiny muted">Man photos for ${Object.keys(LIME.ART_M || {}).length} of ${LIME.EXERCISES.length} moves so far; the rest show the woman.</small>` : ''}` : ''}
         </div>
         <div class="set-row col">
           <div class="row"><span class="ico">${LIME.icon('search')}</span><span class="grow">Text size<small>${s.settings.text === 'system' ? 'Following your phone\'s text size' : 'Auto follows your phone\'s text size'}</small></span></div>
@@ -113,6 +116,18 @@
       LIME.toast(`Demos: ${({ photo: 'photos', '3d': '3D bodies', flat: 'simple drawings' })[next]}`, { undo: () => {
         if (LIME.demoStyle() !== next) return;
         LIME.store.update((x) => { x.settings.demo = prev; });
+        if (location.hash.startsWith('#/settings')) render(view);
+      } });
+    });
+    U.$$('[data-athlete]', view).forEach((b) => b.onclick = () => {
+      const prev = s.settings.athlete;
+      const next = b.getAttribute('data-athlete');
+      if (prev === next) return;
+      LIME.store.update((x) => { x.settings.athlete = next; });
+      render(view);
+      LIME.toast(`Photos now show a ${next === 'm' ? 'man' : 'woman'}`, { undo: () => {
+        if (st().settings.athlete !== next) return;
+        LIME.store.update((x) => { x.settings.athlete = prev; });
         if (location.hash.startsWith('#/settings')) render(view);
       } });
     });

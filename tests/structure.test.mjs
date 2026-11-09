@@ -91,6 +91,12 @@ artIds.forEach((id) => {
   ok(!!L.ex(id), `photo id ${id} is a real exercise`);
   ['a', 'b', 't'].forEach((s) => { const f = `media/ex/${id}-${s}.webp`; if (!existsSync(join(ROOT, f))) ok(false, `missing ${f}`); });
 });
+const manIds = Object.keys(L.ART_M || {});
+ok(true, `${manIds.length} exercises have man photos`);
+manIds.forEach((id) => {
+  if (!L.ex(id)) ok(false, `man photo id ${id} is not a real exercise`);
+  ['a', 'b', 't'].forEach((s) => { const f = `media/ex/m/${id}-${s}.webp`; if (!existsSync(join(ROOT, f))) ok(false, `missing ${f}`); });
+});
 const big = readdirSync(join(ROOT, 'media/ex')).filter((f) => statSync(join(ROOT, 'media/ex', f)).size > 150 * 1024);
 ok(!big.length, `every photo under 150 KB${big.length ? ' (too big: ' + big.join(', ') + ')' : ''}`);
 

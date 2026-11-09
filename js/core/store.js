@@ -28,6 +28,7 @@
         body3d: true,         // kept for old backups; superseded by demo
         demo: 'photo',        // photo | 3d | flat
         demoChosen: false,    // true once the user picks a style in Settings
+        athlete: 'w',         // who the exercise photos show: w (woman) | m (man)
         suggest: true,        // weight suggestions in the player
         accent: 'lime',
         text: 'm',            // system | s | m | l | xl
@@ -56,6 +57,7 @@
     // v0.4: demo style replaces the 3D on/off switch
     // (the old 3D on/off switch predates photos, so it never meant "hide photos")
     if (!(s.settings && s.settings.demo)) out.settings.demo = 'photo';
+    if (!['w', 'm'].includes(out.settings.athlete)) out.settings.athlete = 'w';
     // v0.5.1: undo v0.4's wrong move of old "3D off" users to Simple, unless they picked it themselves
     if (out.settings.demo === 'flat' && out.settings.body3d === false && !out.settings.demoChosen) out.settings.demo = 'photo';
     if (!['photo', '3d', 'flat'].includes(out.settings.demo)) out.settings.demo = 'photo';

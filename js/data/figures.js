@@ -201,12 +201,20 @@
    * Start and end photos (js/data/art.js) blended in a loop. Thumbnails
    * (opts.still) use the small -t image.
    */
+  /** Which photo set to use for an exercise: the chosen athlete's, else the woman's. */
+  function photoSet(id) {
+    const s = LIME.store && LIME.store.state.settings;
+    if (s && s.athlete === 'm' && LIME.ART_M && LIME.ART_M[id]) return { dir: 'media/ex/m/', wh: LIME.ART_M[id] };
+    return LIME.ART && LIME.ART[id] ? { dir: 'media/ex/', wh: LIME.ART[id] } : null;
+  }
+
   function photo(ex, opts) {
-    const E = LIME.U.esc, base = 'media/ex/' + ex.id;
+    const set = photoSet(ex.id);
+    const E = LIME.U.esc, base = set.dir + ex.id;
     if (opts.still) return `<img class="ph-thumb" src="${base}-t.webp" alt="" loading="lazy" decoding="async">`;
     const pat = (LIME.POSES && LIME.POSES.patterns[ex.fig]) || {};
     const dur = Math.min(3.6, Math.max(2.4, (pat.dur || 2.4) * 1.3)).toFixed(1); // one hold in each pose
-    const wh = LIME.ART[ex.id];
+    const wh = set.wh;
     return `<div class="photo" style="--dur:${dur}s;--ar:${wh[0]}/${wh[1]}" role="img" aria-label="${E(ex.name)}: start and end position">
       <img class="ph-a" src="${base}-a.webp" alt="" decoding="async" draggable="false">
       <img class="ph-b" src="${base}-b.webp" alt="" decoding="async" draggable="false">
@@ -241,6 +249,7 @@
   LIME.figure = figure;
   LIME.media = media;
   LIME.demoStyle = demoStyle;
+  LIME.photoSet = photoSet;
   LIME.figureSlot = slot;
   LIME.FIGURES = Object.keys(P);
   LIME.POSES = { patterns: P, stand: STAND, front: ['jack', 'pullup'] };

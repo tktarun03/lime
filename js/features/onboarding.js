@@ -22,7 +22,7 @@
   ];
 
   function freshDraft() {
-    return { name: '', photo: null, goal: null, level: null, equipment: ['none'], days: 3, minutes: 30, units: 'kg', bodyWeight: '' };
+    return { name: '', photo: null, goal: null, level: null, equipment: ['none'], days: 3, minutes: 30, units: 'kg', bodyWeight: '', athlete: 'w' };
   }
 
   const STEPS = ['name', 'goal', 'level', 'equipment', 'days', 'minutes', 'body', 'review'];
@@ -98,6 +98,8 @@
               <input type="file" id="ob-photo" accept="image/*" hidden>
               ${d.photo ? `<span class="avatar"><img src="${d.photo}" alt=""></span>` : '<span class="muted small">Optional</span>'}
             </div>
+            <div class="field"><span>Exercise photos show</span>
+              <div class="seg" role="radiogroup" aria-label="Exercise photos show">${[['w', 'A woman'], ['m', 'A man']].map(([id, label]) => `<button type="button" data-athlete="${id}" class="${d.athlete === id ? 'on' : ''}" role="radio" aria-checked="${d.athlete === id}">${label}</button>`).join('')}</div></div>
             <div class="row" style="flex-wrap:wrap;gap:0">
               <button type="button" class="link-btn" data-demo>Just looking? Try demo mode</button>
               <label class="link-btn" for="ob-restore" style="display:inline-flex;align-items:center">Restore a backup</label>
@@ -147,6 +149,7 @@
             <div class="review-row"><span>Name</span><span>${U.esc(d.name)}</span></div>
             <div class="review-row"><span>Goal</span><span>${U.esc(goal ? goal.label : '')}</span></div>
             <div class="review-row"><span>Level</span><span>${U.esc(level ? level.label : '')}</span></div>
+            <div class="review-row"><span>Exercise photos</span><span>${d.athlete === 'm' ? 'Man' : 'Woman'}</span></div>
             <div class="review-row"><span>Equipment</span><span>${U.esc(eq.length ? eq.join(', ') : 'Bodyweight only')}</span></div>
             <div class="review-row"><span>Week</span><span>${U.esc(plan.days.map((x) => x.title).join(' · '))}</span></div>
           </div>
@@ -223,6 +226,10 @@
         try { draft.photo = await LIME.app.shrinkPhoto(f); renderStep(view); } catch (err) { LIME.toast('Couldn\'t use that photo', { kind: 'bad', body: 'Try a JPG or PNG.' }); }
       });
       U.$('[data-demo]', view).onclick = startDemo;
+      U.$$('[data-athlete]', view).forEach((b) => b.onclick = () => {
+        draft.athlete = b.getAttribute('data-athlete');
+        U.$$('[data-athlete]', view).forEach((x) => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); });
+      });
       U.$('#ob-restore', view).onchange = (e) => LIME.settings.restoreFrom(e.target);
     }
 
@@ -271,12 +278,14 @@
 
   function finish() {
     const prof = toProfile();
+    const athlete = draft.athlete === 'm' ? 'm' : 'w';
     const plan = LIME.planner.build(prof);
     LIME.store.update((s) => {
       s.profile = prof;
       s.plan = plan;
       s.ui.introSeen = true;
       s.ui.lastVersionSeen = LIME.VERSION;
+      s.settings.athlete = athlete;
       if (prof.bodyWeight) s.bodyLog.push({ date: U.dayKey(), kg: Math.round(prof.bodyWeight * 10) / 10 });
     });
     draft = null; step = 0;

@@ -402,3 +402,34 @@ test('weight suggestions: up after every rep, hold after misses, shown in the pl
   await expect(page.locator('.sugg.up')).toContainText('+2 kg');
   await expect(page.locator('#pl-kg')).toHaveValue('22');
 });
+
+test('photo athlete: chosen at sign-up and in Settings, man falls back to woman', async ({ page }) => {
+  await page.goto('/');
+  await page.click('[data-skip]');
+  await page.fill('#ob-name', 'Ravi');
+  await page.click('[data-athlete="m"]');
+  await expect(page.locator('#ob-name')).toHaveValue('Ravi'); // typing kept
+  await page.click('[data-continue]');
+  await page.click('[data-opt="muscle"]');
+  await page.click('[data-opt="intermediate"]');
+  await page.click('[data-opt="barbell"]');
+  await page.click('[data-continue]');
+  await page.click('[data-opt="3"]'); await page.click('[data-continue]');
+  await page.click('[data-opt="30"]'); await page.click('[data-continue]');
+  await page.click('[data-continue]');
+  await expect(page.locator('.review-row', { hasText: 'Exercise photos' })).toContainText('Man');
+  await page.click('[data-continue]');
+  expect(await page.evaluate(() => LIME.store.state.settings.athlete)).toBe('m');
+  const hasMan = await page.evaluate(() => Object.keys(LIME.ART_M)[0]);
+  const noMan = await page.evaluate(() => LIME.EXERCISES.find((e) => !LIME.ART_M[e.id]).id);
+  await page.goto('/#/library/' + hasMan);
+  await expect(page.locator('.sheet .photo .ph-a')).toHaveAttribute('src', `media/ex/m/${hasMan}-a.webp`);
+  await page.goto('/#/library/' + noMan);
+  await expect(page.locator('.sheet .photo .ph-a')).toHaveAttribute('src', `media/ex/${noMan}-a.webp`);
+  // switch back in Settings, with undo
+  await page.goto('/#/settings');
+  await page.click('[data-athlete="w"]');
+  expect(await page.evaluate(() => LIME.store.state.settings.athlete)).toBe('w');
+  await page.click('.toast .t-btn');
+  expect(await page.evaluate(() => LIME.store.state.settings.athlete)).toBe('m');
+});

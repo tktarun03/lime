@@ -4,6 +4,12 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.6.0 — 2026-11-09
+
+- Choose whether exercise photos show a woman or a man, at sign-up or in
+  Settings → Look.
+- Man photos are coming in batches; until then those moves show the woman.
+
 ## 0.5.1 — 2026-11-09
 
 - Fixed: if you had turned off 3D demos in an older version, exercise photos
