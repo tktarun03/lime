@@ -110,6 +110,9 @@ be set to **GitHub Actions**. The deploy job only runs after tests pass.
   That needs a native wrapper (Capacitor) — roadmap phase 3.
 - **No alerts while closed.** No server means no push; rest timers only alert
   while the app is open (screen is kept on during workouts).
+- **Zoom is off:** viewport `user-scalable=no` + `touch-action: manipulation`, and
+  `noZoom()` in app.js blocks iOS pinch (gesture events, 2-finger touchmove) and
+  double-tap. Settings → Text size is the accessible way to enlarge text.
 - **iPhone can't vibrate** from the web; beeps need one tap first to unlock audio.
 - IndexedDB writes are async; `store.flushSync()` mirrors state to
   localStorage on `pagehide` so a closed app doesn't lose the last set.

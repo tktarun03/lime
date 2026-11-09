@@ -2,8 +2,16 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.7.0',
+  VERSION: '0.7.1',
   RELEASES: [
+    {
+      version: '0.7.1',
+      date: '2026-11-09',
+      notes: [
+        'Pinch and double-tap zoom are off, so the app feels like a native app. Use Settings → Look → Text size for bigger text.',
+        'The menu bar is now fixed to the bottom edge and also shows while editing your plan.'
+      ]
+    },
     {
       version: '0.7.0',
       date: '2026-11-09',

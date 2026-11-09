@@ -434,3 +434,53 @@ test('photo athlete: chosen at sign-up and in Settings, man falls back to woman'
   await page.click('.toast .t-btn');
   expect(await page.evaluate(() => LIME.store.state.settings.athlete)).toBe('m');
 });
+
+test('zoom is off: viewport locks scale, pinch gestures are blocked', async ({ page }) => {
+  await page.goto('/');
+  const vp = await page.getAttribute('meta[name="viewport"]', 'content');
+  expect(vp).toContain('user-scalable=no');
+  expect(vp).toContain('maximum-scale=1');
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).touchAction)).toBe('manipulation');
+  // a two-finger touchmove is cancelled
+  const blocked = await page.evaluate(() => {
+    const t = (id) => new Touch({ identifier: id, target: document.body, clientX: 10 * id, clientY: 10 });
+    const ev = new TouchEvent('touchmove', { touches: [t(1), t(2)], cancelable: true, bubbles: true });
+    document.body.dispatchEvent(ev);
+    return ev.defaultPrevented;
+  });
+  expect(blocked).toBe(true);
+  // a one-finger move (scrolling) is not
+  const scroll = await page.evaluate(() => {
+    const ev = new TouchEvent('touchmove', { touches: [new Touch({ identifier: 1, target: document.body, clientX: 1, clientY: 1 })], cancelable: true, bubbles: true });
+    document.body.dispatchEvent(ev);
+    return ev.defaultPrevented;
+  });
+  expect(scroll).toBe(false);
+});
+
+test('menu bar stays fixed at the bottom on every main screen while scrolling', async ({ page }) => {
+  await page.goto('/');
+  await page.click('[data-skip]');
+  await page.click('[data-demo]');
+  const vh = page.viewportSize().height;
+  for (const hash of ['#/home', '#/library', '#/progress', '#/settings', '#/plan', '#/plan/d1']) {
+    await page.goto('/' + hash);
+    await expect(page.locator('#tabbar')).toBeVisible();
+    for (const y of [0, 600, 99999]) {
+      await page.evaluate((v) => window.scrollTo(0, v), y);
+      await page.waitForTimeout(50);
+      const box = await page.locator('#tabbar').boundingBox();
+      expect(Math.round(box.y + box.height), `${hash} at scroll ${y}`).toBe(vh);
+    }
+  }
+  // the last item on a long page is not hidden behind the bar
+  await page.goto('/#/settings');
+  await page.evaluate(() => window.scrollTo(0, 99999));
+  const last = await page.locator('.set-group').last().boundingBox();
+  const bar = await page.locator('#tabbar').boundingBox();
+  expect(last.y + last.height).toBeLessThanOrEqual(bar.y);
+  // hidden only where there's nothing to switch to: during a workout
+  await page.goto('/#/home');
+  await page.click('[data-start]');
+  await expect(page.locator('#tabbar')).toBeHidden();
+});

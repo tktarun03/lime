@@ -4,6 +4,13 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.7.1 — 2026-11-09
+
+- Pinch and double-tap zoom are off, so the app feels like a native app. Use
+  Settings → Look → Text size for bigger text.
+- The menu bar is now fixed to the bottom edge and also shows while editing
+  your plan.
+
 ## 0.7.0 — 2026-11-09
 
 - Man photos for all 35 exercises. Choose Woman or Man in Settings → Look.

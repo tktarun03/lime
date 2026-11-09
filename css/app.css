@@ -68,6 +68,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+/* No double-tap zoom; scrolling still works. Pinch is blocked in js/app.js (iOS ignores user-scalable=no). */
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -451,15 +453,20 @@ body.no-tabs .view { padding-bottom: calc(var(--safe-b) + 24px); }
 .rel h3 { font-size: .95rem; font-weight: var(--w-med); }
 .rel ul { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .9rem; }
 
-/* ---------- Tab bar (floating glass) ---------- */
+/* ---------- Tab bar (docked glass, always at the bottom edge) ---------- */
+/* Fixed to the screen, flush with the bottom; the home-indicator area is
+   part of the bar (padding), so nothing scrolls underneath it. Direct child
+   of <body> with no transformed ancestor, so `fixed` stays fixed. */
 .tabbar {
-  position: fixed; left: 12px; right: 12px; bottom: calc(var(--safe-b) + 8px); z-index: 10;
-  max-width: 520px; margin: 0 auto;
-  display: flex; justify-content: space-around; align-items: stretch; height: var(--tab-h);
-  border-radius: 22px; background: var(--glass-edge), rgba(18, 20, 18, .62);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  height: calc(var(--tab-h) + var(--safe-b)); padding: 0 max(8px, env(safe-area-inset-right, 0px)) var(--safe-b) max(8px, env(safe-area-inset-left, 0px));
+  display: flex; justify-content: space-around; align-items: stretch;
+  background: var(--glass-edge), rgba(10, 12, 10, .92);
   -webkit-backdrop-filter: blur(26px) saturate(170%); backdrop-filter: blur(26px) saturate(170%);
-  border: 1px solid var(--glass-hi); box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 18px 40px -12px rgba(0,0,0,.8);
+  border-top: 1px solid var(--glass-hi); box-shadow: 0 -12px 30px -18px rgba(0,0,0,.9);
+  transform: translateZ(0); /* own layer: no jitter while scrolling on iOS */
 }
+.tabbar > a { max-width: 130px; }
 .tabbar a { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--muted); text-decoration: none; font-size: 11px; font-weight: var(--w-med); min-width: 44px; letter-spacing: .02em; }
 .tabbar a.on { color: var(--accent); }
 .tabbar a.on .ico { filter: drop-shadow(0 0 6px var(--accent-glow)); }
@@ -468,14 +475,19 @@ body.no-tabs .view { padding-bottom: calc(var(--safe-b) + 24px); }
 /* ---------- Toast (BasKar pattern, light glass) ---------- */
 .toast {
   position: fixed; left: 50%; z-index: 60; width: min(440px, calc(100% - 32px));
-  bottom: calc(var(--tab-h) + var(--safe-b) + 18px);
+  bottom: calc(var(--tab-h) + var(--safe-b) + 10px);
   transform: translate(-50%, 0); display: flex; align-items: center; gap: 10px;
   padding: 8px 4px 8px 14px; border-radius: 18px; background: var(--notif-bg); color: var(--notif-ink);
   -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%);
   box-shadow: 0 16px 40px rgba(0,0,0,.5); animation: toast-in .32s cubic-bezier(.2,.8,.2,1);
 }
 body.no-tabs .toast { bottom: calc(var(--safe-b) + 16px); }
-body:has(.pl-foot) .toast, body:has(.sheet-foot) .toast, body:has(.ob-foot) .toast { bottom: calc(var(--safe-b) + 86px); }
+body:has(.pl-foot) .toast, body:has(.ob-foot) .toast { bottom: calc(var(--safe-b) + 86px); }
+/* With a sheet open, notices move to the top so they never cover the sheet's buttons */
+body:has(.sheet) .toast { top: calc(var(--safe-t) + 10px); bottom: auto; animation-name: toast-in-top; }
+body:has(.sheet) .toast.out { animation-name: toast-out-top; }
+@keyframes toast-in-top { from { transform: translate(-50%, -120%); opacity: 0; } }
+@keyframes toast-out-top { to { transform: translate(-50%, -120%); opacity: 0; } }
 .toast.out { animation: toast-out .22s ease-in forwards; }
 .toast .t-ico { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 50%; }
 .toast.good .t-ico { background: #1f7a33; color: #fff; }

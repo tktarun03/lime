@@ -14,7 +14,7 @@
     progress: { render: (v, p) => LIME.progress.render(v, p), tabs: true, tab: 'progress' },
     settings: { render: (v, p) => LIME.settings.render(v, p), tabs: true, tab: 'settings' },
     onboarding: { render: (v) => LIME.onboarding.render(v), tabs: false },
-    plan: { render: (v, p) => LIME.planEditor.render(v, p), tabs: false },
+    plan: { render: (v, p) => LIME.planEditor.render(v, p), tabs: true, tab: 'home' },
     workout: { render: (v) => LIME.player.render(v), tabs: false },
     start: { render: () => { const d = LIME.home.nextDay(); if (d) LIME.player.start(d.id); }, tabs: false }
   };
@@ -206,7 +206,23 @@
     setTimeout(() => sp.remove(), 350);
   }
 
+  /** Block pinch-zoom and double-tap zoom. iPhone Safari ignores user-scalable=no,
+   *  so stop its gesture events and two-finger moves directly. Text stays
+   *  readable through Settings → Text size. */
+  function noZoom() {
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach((ev) =>
+      document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
+    document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    let lastTap = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTap < 300 && !e.target.closest('input, textarea, select')) e.preventDefault();
+      lastTap = now;
+    }, { passive: false });
+  }
+
   async function boot() {
+    noZoom();
     try {
       await LIME.store.load();
     } catch (e) {
