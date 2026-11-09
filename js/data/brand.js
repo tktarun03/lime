@@ -7,10 +7,15 @@
     creator: 'Arunkumar Thamilarasu',
     firstName: 'Arunkumar',
     initials: 'AT',
-    role: 'Creator of LIME',
+    photo: 'media/creator.webp',                     // 480×480, shown as a circle
+    role: 'Creator of LIME · Podcast host',
     tagline: 'Created out of passion',
+    podcast: 'Beyond The Obvious with Arun',
+    motto: 'Learn. Explore. Share ideas.',
     year: 2026,
     links: {
+      youtube: 'https://www.youtube.com/@BeyondObviousArun',
+      instagram: 'https://www.instagram.com/beyondobviousarun/',
       linkedin: '',                                  // e.g. 'https://www.linkedin.com/in/your-name'
       github: 'https://github.com/tktarun03'
     },
@@ -19,8 +24,9 @@
       'Real exercise photos, a plan built around your goal and time, rest timers and honest progress. No account, no ads and no tracking. Everything you log stays on your phone.'
     ],
     about: [
-      "Hi, I'm Arunkumar. I design and build apps out of passion, and LIME is one of them.",
-      'I care about clean design, small details and keeping your data private. If LIME helps you train, I would love to hear from you.'
+      "Hi, I'm Arunkumar. I host Beyond The Obvious with Arun, a podcast about AI, technology and ideas for social good, in Tamil and English.",
+      'I love to learn, explore and share ideas, and I build apps like LIME out of passion, with clean design and your privacy first.',
+      'Follow me on YouTube and Instagram for new episodes and ideas.'
     ]
   };
 })();

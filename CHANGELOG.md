@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.8.1 — 2026-11-09
+
+- About page: creator photo, the Beyond The Obvious podcast, and follow links
+  for YouTube and Instagram.
+
 ## 0.8.0 — 2026-11-09
 
 - New About page: the story behind LIME and its creator, Arunkumar

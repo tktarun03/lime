@@ -33,13 +33,16 @@
       <div class="section-title"><h2>About me</h2></div>
       <div class="card">
         <div class="row" style="gap:14px">
-          <span class="about-avatar" aria-hidden="true">${U.esc(B.initials)}</span>
+          ${B.photo ? `<img class="about-avatar photo-av" src="${U.esc(B.photo)}" alt="${U.esc(B.creator)}" width="72" height="72">` : `<span class="about-avatar" aria-hidden="true">${U.esc(B.initials)}</span>`}
           <span class="grow"><strong class="about-creator">${U.esc(B.creator)}</strong><br><span class="small muted">${U.esc(B.role)}</span></span>
         </div>
+        ${B.motto ? `<p class="about-motto disp slant">${U.esc(B.motto)}</p>` : ''}
         <div class="about-text" style="margin-top:12px">${B.about.map((p) => `<p>${U.esc(p)}</p>`).join('')}</div>
         <div class="stack" style="margin-top:14px">
-          ${linkBtn(B.links.linkedin, 'linkedin', 'Connect on LinkedIn', true)}
-          ${linkBtn(B.links.github, 'github', 'See my work on GitHub', !B.links.linkedin)}
+          ${linkBtn(B.links.youtube, 'youtube', 'Follow on YouTube', true)}
+          ${linkBtn(B.links.instagram, 'instagram', 'Follow on Instagram', !B.links.youtube)}
+          ${linkBtn(B.links.linkedin, 'linkedin', 'Connect on LinkedIn', false)}
+          ${linkBtn(B.links.github, 'github', 'See my work on GitHub', false)}
         </div>
       </div>
 

@@ -2,8 +2,15 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.8.0',
+  VERSION: '0.8.1',
   RELEASES: [
+    {
+      version: '0.8.1',
+      date: '2026-11-09',
+      notes: [
+        'About page: creator photo, the Beyond The Obvious podcast, and follow links for YouTube and Instagram.'
+      ]
+    },
     {
       version: '0.8.0',
       date: '2026-11-09',

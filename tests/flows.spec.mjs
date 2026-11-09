@@ -497,6 +497,11 @@ test('branding: About page, credits on Home and Settings, empty links hidden', a
   await expect(page.locator('#tabbar')).toBeVisible();
   const linkedin = await page.evaluate(() => LIME.BRAND.links.linkedin);
   await expect(page.locator('a[href*="linkedin.com"]')).toHaveCount(linkedin ? 1 : 0);
+  await expect(page.locator('img.photo-av')).toHaveAttribute('src', 'media/creator.webp');
+  expect(await page.locator('img.photo-av').evaluate((i) => i.decode().then(() => i.naturalWidth))).toBe(480);
+  await expect(page.locator('a[href="https://www.youtube.com/@BeyondObviousArun"]')).toHaveCount(1);
+  await expect(page.locator('a[href="https://www.instagram.com/beyondobviousarun/"]')).toHaveCount(1);
+  await expect(page.locator('.about-text')).toContainText(['Beyond The Obvious']);
   const gh = page.locator('a[href*="github.com"]');
   await expect(gh).toHaveAttribute('target', '_blank');
   await expect(gh).toHaveAttribute('rel', /noopener/);
