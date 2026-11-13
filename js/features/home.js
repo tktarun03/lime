@@ -117,10 +117,12 @@
           <span class="ico chev muted">${LIME.icon('chev')}</span></a>`).join('')}</div>
 
       <div class="card tex" style="margin-top:12px"><div class="eyebrow">Today's line</div><p class="quote slant" style="margin:8px 0 0">${U.esc(line)}</p></div>
+      <button type="button" class="btn btn-ghost btn-block invite-btn" data-invite>${LIME.icon('share')} Share LIME with friends</button>
       <a class="credit" href="#/about">${U.esc(LIME.BRAND.tagline)} by <strong>${U.esc(LIME.BRAND.creator)}</strong></a>
     `;
 
     U.$('[data-refresh]', view).onclick = (e) => LIME.app.refresh(e.currentTarget);
+    U.$('[data-invite]', view).onclick = () => LIME.invite.open();
     U.$$('[data-preview]', view).forEach((b) => b.addEventListener('click', (e) => { e.preventDefault(); preview(b.getAttribute('data-preview')); }));
     const hide = U.$('[data-hide-list]', view);
     if (hide) hide.onclick = () => {

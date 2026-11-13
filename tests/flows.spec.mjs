@@ -508,3 +508,30 @@ test('branding: About page, credits on Home and Settings, empty links hidden', a
   await noHorizontalScroll(page);
   expect(errs).toEqual([]);
 });
+
+test('share LIME: QR code, link, WhatsApp and copy from Home, Settings and About', async ({ page }) => {
+  const errs = errorsOf(page);
+  await onboard(page);
+  const url = await page.evaluate(() => LIME.BRAND.appUrl);
+  expect(url).toMatch(/^https:\/\//);
+  await page.click('[data-invite]');
+  const sheet = page.locator('.sheet');
+  await expect(sheet).toContainText('Share LIME');
+  await expect(sheet.locator('.qr-box svg.qr path')).toHaveCount(1);
+  await expect(sheet.locator('#invite-link')).toHaveValue(url);
+  const wa = sheet.locator('[data-wa]');
+  await expect(wa).toHaveAttribute('href', new RegExp('^https://wa\\.me/\\?text=.*' + encodeURIComponent(url).replace(/[.?*+^$()|[\]\\]/g, '\\$&')));
+  await expect(wa).toHaveAttribute('rel', /noopener/);
+  await sheet.locator('[data-copy]').click();
+  await expect(page.locator('.toast')).toContainText(/copied|Copy the selected link/i);
+  await noHorizontalScroll(page);
+  await sheet.locator('[data-close]').click();
+  await page.goto('/#/settings');
+  await page.click('.set-row[data-invite]');
+  await expect(page.locator('.sheet .qr-box svg.qr')).toHaveCount(1);
+  await page.locator('.sheet [data-close]').click();
+  await page.goto('/#/about');
+  await page.click('[data-invite]');
+  await expect(page.locator('.sheet #invite-link')).toHaveValue(url);
+  expect(errs).toEqual([]);
+});

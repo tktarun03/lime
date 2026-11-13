@@ -28,7 +28,9 @@
       </section>
 
       <div class="section-title"><h2>The story</h2></div>
-      <div class="card about-text">${B.story.map((p) => `<p>${U.esc(p)}</p>`).join('')}</div>
+      <div class="card about-text">${B.story.map((p) => `<p>${U.esc(p)}</p>`).join('')}
+        <button type="button" class="btn btn-block btn-lg" data-invite style="margin-top:14px">${LIME.icon('share')} Share LIME with friends</button>
+      </div>
 
       <div class="section-title"><h2>About me</h2></div>
       <div class="card">
@@ -47,6 +49,7 @@
       </div>
 
       <p class="credit">© ${U.esc(B.year)} ${U.esc(B.creator)}. ${U.esc(B.tagline)}.</p>`;
+    U.$('[data-invite]', view).onclick = () => LIME.invite.open();
   }
 
   LIME.about = { render };

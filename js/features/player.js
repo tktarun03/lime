@@ -455,7 +455,7 @@
       <button type="button" class="btn btn-primary btn-lg btn-disp" data-home>Done</button>
     </div></div>`;
     U.$('[data-home]', view).onclick = () => { location.hash = '#/home'; };
-    U.$('[data-share]', view).onclick = () => LIME.app.share(`Just finished ${session.title} on LIME: ${U.fmtClock(session.durationSec)}, ${session.sets.length} sets${vol ? `, ${U.fmtNum(vol)} ${units()} lifted` : ''}.${prs.length ? ` ${prs.length} new PR${prs.length > 1 ? 's' : ''}!` : ''} 💪`);
+    U.$('[data-share]', view).onclick = () => LIME.app.share(`Just finished ${session.title} on LIME: ${U.fmtClock(session.durationSec)}, ${session.sets.length} sets${vol ? `, ${U.fmtNum(vol)} ${units()} lifted` : ''}.${prs.length ? ` ${prs.length} new PR${prs.length > 1 ? 's' : ''}!` : ''} 💪 Train with me:`, LIME.invite.appUrl());
   }
 
   LIME.player = { start, render, cleanup };

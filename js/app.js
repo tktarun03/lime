@@ -79,10 +79,11 @@
   }
 
   /** Share sheet → clipboard → copy box. */
-  async function share(text) {
-    try { if (navigator.share) { await navigator.share({ text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
-    try { await navigator.clipboard.writeText(text); LIME.toast('Copied to clipboard', { kind: 'good' }); return; } catch (e) { /* fall through */ }
-    LIME.sheet.open({ title: 'Copy this', body: `<textarea class="input" rows="4" readonly>${U.esc(text)}</textarea>` });
+  async function share(text, url) {
+    const full = url ? `${text} ${url}` : text;
+    try { if (navigator.share) { await navigator.share(url ? { text, url } : { text }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(full); LIME.toast('Copied to clipboard', { kind: 'good' }); return; } catch (e) { /* fall through */ }
+    LIME.sheet.open({ title: 'Copy this', body: `<textarea class="input" rows="4" readonly>${U.esc(full)}</textarea>` });
   }
 
   async function selfCheck() {

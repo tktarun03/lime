@@ -28,6 +28,7 @@ sw.js                   service worker (page network-first, versioned assets cac
 css/app.css             all styles; tokens at the top
 fonts/                  self-hosted variable Oswald + Inter (OFL) — no Google Fonts requests
 vendor/three.min.js     three.js r149 (MIT), loaded only when a 3D body is shown
+vendor/qrcode.min.js    qrcode-generator 1.4.4 (MIT), loaded only when the Share sheet opens
 icons/                  app icons from the owner's logo: logo-1024.png (source, full square), icon-512/192, apple-touch-icon (180), favicon-64; favicon.ico at root
 media/ex/               exercise photos, woman: <id>-a.webp (start), -b.webp (end), -t.webp (thumb)
 media/ex/m/             exercise photos, man (same names); missing ones fall back to the woman's
@@ -35,8 +36,8 @@ media/                  optional exercise video clips (see media/README.md)
 tools/build-art.py      turns 1200×1200 transparent PNGs into media/ex/*.webp + js/data/art.js
 js/core/                version, util, store (storage + migrate), timer (+ wake lock), audio
 js/data/                exercises, figures (key poses + SVG fallback drawings), planner
-js/ui/                  icons, toast, sheet, charts, body3d (anatomical 3D figures)
-js/features/            stats, onboarding, home, library, player, plan (editor), progress, settings
+js/ui/                  icons, toast, sheet, charts, body3d (anatomical 3D figures), qr (QR code SVG)
+js/features/            stats, onboarding, home, library, player, plan (editor), about, invite (Share LIME), progress, settings
 js/app.js               boot, router, look, What's new, backup reminder, self-check
 tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 .github/workflows/      CI: tests gate the Pages deploy
@@ -60,6 +61,7 @@ tests/                  structure.test.mjs (node) + flows.spec.mjs (Playwright)
 | Show a notice                                | `LIME.toast(title, { body, kind, undo, action })` |
 | Colours / fonts / spacing                    | tokens at the top of `css/app.css` |
 | Creator name, About text, LinkedIn/GitHub    | `js/data/brand.js` (empty links are hidden) |
+| Change the link friends get / share message   | `js/data/brand.js` `appUrl`, `js/features/invite.js` `message()` |
 
 ## Golden rules
 

@@ -4,6 +4,11 @@ Newest first. Every release also updates `LIME.RELEASES` in `js/core/version.js`
 the `?v=` on every asset link in `index.html`, `VERSION` in `sw.js`, and
 `version` in `package.json`. `tests/structure.test.mjs` fails if they differ.
 
+## 0.9.0 — 2026-11-13
+
+- Share LIME with friends: a QR code they can scan, the phone's share sheet, WhatsApp or Copy link. On Home, in Settings and on the About page.
+- Sharing a finished workout now includes the app link, so friends can join.
+
 ## 0.8.1 — 2026-11-09
 
 - About page: creator photo, the Beyond The Obvious podcast, and follow links

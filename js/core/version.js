@@ -2,8 +2,16 @@
    VERSION must match ?v= on every asset link in index.html, sw.js VERSION
    and the newest CHANGELOG.md entry (checked by tests/structure.test.mjs). */
 var LIME = {
-  VERSION: '0.8.1',
+  VERSION: '0.9.0',
   RELEASES: [
+    {
+      version: '0.9.0',
+      date: '2026-11-13',
+      notes: [
+        "Share LIME with friends: a QR code they can scan, the phone's share sheet, WhatsApp or Copy link. On Home, in Settings and on the About page.",
+        "Sharing a finished workout now includes the app link, so friends can join."
+      ]
+    },
     {
       version: '0.8.1',
       date: '2026-11-09',

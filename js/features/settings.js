@@ -90,6 +90,7 @@
 
       <div class="section-title"><h2>About</h2></div>
       <div class="set-group">
+        ${row({ icon: 'share', label: 'Share LIME with friends', sub: 'QR code, WhatsApp or any app', attr: 'data-invite' })}
         ${row({ icon: 'refresh', label: 'Refresh app', sub: 'Reload and check for updates. Your data stays.', val: 'v' + LIME.VERSION, attr: 'data-refresh' })}
         ${row({ icon: 'heart', label: 'About LIME', sub: 'The story and the creator', href: '#/about' })}
         ${row({ icon: 'sparkle', label: 'Version history', href: '#/settings/versions' })}
@@ -138,6 +139,7 @@
       LIME.app.applyLook(); render(view);
     });
     U.$('[data-refresh]', view).onclick = (e) => LIME.app.refresh(e.currentTarget.querySelector('.ico'));
+    U.$('[data-invite]', view).onclick = () => LIME.invite.open();
     U.$('[data-backup]', view).onclick = () => backup(view);
     const file = U.$('#restore-file', view);
     U.$('[data-restore]', view).onclick = () => file.click();

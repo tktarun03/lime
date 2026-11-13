@@ -13,6 +13,7 @@
     podcast: 'Beyond The Obvious with Arun',
     motto: 'Learn. Explore. Share ideas.',
     year: 2026,
+    appUrl: 'https://tktarun03.github.io/lime/',     // the link friends get (Share LIME)
     links: {
       youtube: 'https://www.youtube.com/@BeyondObviousArun',
       instagram: 'https://www.instagram.com/beyondobviousarun/',

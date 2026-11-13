@@ -1,6 +1,6 @@
 /* Service worker: page network-first, versioned assets cache-first.
    VERSION must equal LIME.VERSION (checked by tests). */
-const VERSION = '0.8.1';
+const VERSION = '0.9.0';
 const CACHE = 'lime-' + VERSION;
 const V = '?v=' + VERSION;
 
@@ -12,6 +12,7 @@ const ASSETS = [
   'fonts/oswald-var.woff2',
   'fonts/inter-var.woff2',
   'vendor/three.min.js',
+  'vendor/qrcode.min.js',
   'icons/favicon-64.png' + V,
   'icons/apple-touch-icon.png' + V,
   'icons/icon-192.png',
@@ -31,6 +32,7 @@ const ASSETS = [
   'js/ui/sheet.js' + V,
   'js/ui/charts.js' + V,
   'js/ui/body3d.js' + V,
+  'js/ui/qr.js' + V,
   'js/features/stats.js' + V,
   'js/features/onboarding.js' + V,
   'js/features/home.js' + V,
@@ -38,6 +40,7 @@ const ASSETS = [
   'js/features/player.js' + V,
   'js/features/plan.js' + V,
   'js/features/about.js' + V,
+  'js/features/invite.js' + V,
   'js/features/progress.js' + V,
   'js/features/settings.js' + V,
   'js/app.js' + V
